@@ -32,3 +32,18 @@ Route::get('/u/wallet', function () {
     $data['title'] = 'Wallet';
     return view('pages.wallet.list', $data);
 });
+
+Route::get('/u/wallet/transaksi-in/{id_transaction}', function () {
+    $data['title'] = 'Wallet Transaksi IN';
+    return view('pages.wallet.transaction_in', $data);
+});
+
+Route::get('/u/wallet/transaksi-out/{id_transaction}', function () {
+    $data['title'] = 'Wallet Transaksi OUT';
+    return view('pages.wallet.transaction_out', $data);
+});
+
+Route::get('/u/goals', function () {
+    $data['title'] = 'Goals';
+    return view('pages.goal.list', $data);
+});
