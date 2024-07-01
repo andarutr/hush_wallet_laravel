@@ -13,6 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', function () {
+    $data['title'] = 'Login';
+    return view('pages.auth.login', $data);
+});
+
+Route::get('/register', function () {
+    $data['title'] = 'Register';
+    return view('pages.auth.register', $data);
+});
+
+Route::get('/u/dashboard', function () {
+    $data['title'] = 'Dashboard';
+    return view('pages.dashboard', $data);
+});
+
+Route::get('/u/wallet', function () {
+    $data['title'] = 'Wallet';
+    return view('pages.wallet.list', $data);
 });
