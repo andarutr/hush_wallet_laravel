@@ -43,6 +43,16 @@ Route::get('/u/wallet/transaksi-out/{id_transaction}', function () {
     return view('pages.wallet.transaction_out', $data);
 });
 
+Route::get('/u/nabung', function () {
+    $data['title'] = 'Nabung';
+    return view('pages.nabung.list', $data);
+});
+
+Route::get('/u/nabung/selengkapnya', function () {
+    $data['title'] = 'Detail Nabung';
+    return view('pages.nabung.all', $data);
+});
+
 Route::get('/u/goals', function () {
     $data['title'] = 'Goals';
     return view('pages.goal.list', $data);

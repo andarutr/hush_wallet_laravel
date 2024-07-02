@@ -2,7 +2,7 @@
 <html lang="en" data-layout="horizontal" data-topbar="dark" data-sidebar-size="lg" data-sidebar="light" data-sidebar-image="none" data-preloader="disable">
 <head>
     <meta charset="utf-8" />
-    <title>404 Not Found | Hush Wallet</title>
+    <title>500 Error | Hush Wallet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="{{ asset('assets/js/layout.js') }}"></script>
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -17,10 +17,9 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-7 col-lg-8">
                         <div class="text-center">
-                            <img src="{{ asset('assets/images/error400-cover.png') }}" alt="error img" class="img-fluid">
+                            <img src="{{ asset('assets/images/error500.png') }}" alt="error img" class="img-fluid">
                             <div class="mt-3">
-                                <h3 class="text-uppercase">Sorry, Page not Found 😭</h3>
-                                <p class="text-muted mb-4">The page you are looking for not available!</p>
+                                <h3 class="text-uppercase">Contact your administrator!</h3>
                             </div>
                         </div>
                     </div><!-- end col -->
