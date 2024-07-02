@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email', 25)->unique();
             $table->enum('pekerjaan', ['bekerja', 'belum bekerja']);
             $table->string('password');
+            $table->enum('is_admin', ['y','n']);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('outcome', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('nominal');
+            $table->unsignedBigInteger('user_id');
+            $table->string('id_transaksi', 128);
             $table->enum('jenis_pengeluaran', ['keperluan sehari-hari', 'hutang', 'cicilan', 'keinginan', 'bulanan']);
             $table->date('tgl');
             $table->integer('nominal');

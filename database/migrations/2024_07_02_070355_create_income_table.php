@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('income', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('id_transaksi', 128);
             $table->enum('jenis_pendapatan', ['freelance','bekerja','belum bekerja']);
             $table->integer('nominal');
             $table->text('catatan')->nullable();
