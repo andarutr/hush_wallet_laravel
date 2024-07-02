@@ -57,3 +57,13 @@ Route::get('/u/goals', function () {
     $data['title'] = 'Goals';
     return view('pages.goal.list', $data);
 });
+
+Route::get('/u/income', function () {
+    $data['title'] = 'List Income';
+    return view('pages.income.list', $data);
+});
+
+Route::get('/u/outcome', function () {
+    $data['title'] = 'List Outcome';
+    return view('pages.outcome.list', $data);
+});
