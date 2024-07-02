@@ -29,6 +29,8 @@
     <script src="/assets/libs/particles.js/particles.js"></script>
     <script src="/assets/js/pages/particles.app.js"></script>
     <script src="/assets/js/pages/password-addon.init.js"></script>
+    <script src="/assets/js/swal2.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
     @stack('scripts')
 </body>
 </html>
