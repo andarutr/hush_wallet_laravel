@@ -123,11 +123,11 @@
     <div class="col-xl-4 col-md-6">
         <div class="card card-height-100">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Top Referrals Pages</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Summary</h4>
                 <div class="flex-shrink-0">
-                    <button type="button" class="btn btn-soft-primary btn-sm">
+                    <a href="/u/income/laporan" class="btn btn-soft-success btn-sm">
                         Rekapan
-                    </button>
+                    </a>
                 </div>
             </div>
 

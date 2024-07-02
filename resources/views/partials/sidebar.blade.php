@@ -79,11 +79,11 @@
                     <div class="collapse menu-dropdown" id="sidebarOutcome">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="u/outcome" class="nav-link" data-key="t-analytics">
+                                <a href="/u/outcome" class="nav-link" data-key="t-analytics">
                                     List </a>
                             </li>
                             <li class="nav-item">
-                                <a href="u/outcome/laporan" class="nav-link" data-key="t-crm"> Laporan </a>
+                                <a href="/u/outcome/laporan" class="nav-link" data-key="t-crm"> Laporan </a>
                             </li>
                         </ul>
                     </div>

@@ -63,7 +63,17 @@ Route::get('/u/income', function () {
     return view('pages.income.list', $data);
 });
 
+Route::get('/u/income/laporan', function () {
+    $data['title'] = 'Laporan Income';
+    return view('pages.income.report', $data);
+});
+
 Route::get('/u/outcome', function () {
     $data['title'] = 'List Outcome';
     return view('pages.outcome.list', $data);
+});
+
+Route::get('/u/outcome/laporan', function () {
+    $data['title'] = 'Laporan Outcome';
+    return view('pages.outcome.report', $data);
 });
