@@ -12,6 +12,8 @@
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
     @stack('styles')
 </head>
 <body>
@@ -73,7 +75,25 @@
     <script src="{{ asset('assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
 
     <script src="{{ asset('assets/js/pages/dashboard-analytics.init.js') }}"></script>
+    <script src="{{ asset('assets/js/swal2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script>
+        $(document).on("click", "#btnLogout", function(){
+            $.ajax({
+                type: "POST",
+                url: "/logout",
+                success: function(res){
+                    window.location.href = "/login";
+                }
+            })
+        });
+    </script>
     @stack('scripts')
 </body>
 

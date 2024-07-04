@@ -2,7 +2,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="index.html" class="logo logo-dark">
+        <a href="#" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="/assets/images/hush_2.png" alt="" height="22">
             </span>
@@ -11,7 +11,7 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="index.html" class="logo logo-light">
+        <a href="#" class="logo logo-light">
             <span class="logo-sm">
                 <img src="/assets/images/hush_2.png" alt="" height="22">
             </span>
@@ -31,6 +31,20 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
+                @if(Auth::user()->is_admin === 'y')
+                <li class="menu-title"><span data-key="t-menu">Admin</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/su/dashboard">
+                        <i class="bx bxs-dashboard"></i> <span data-key="t-dashboards">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-title"><span data-key="t-menu">Master Data</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/su/master/bank">
+                        <i class="bx bxs-bank"></i> <span data-key="t-dashboards">Data Bank</span>
+                    </a>
+                </li>
+                @else
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/u/dashboard">
@@ -88,6 +102,7 @@
                         </ul>
                     </div>
                 </li>
+                @endif
             </ul>
         </div>
         <!-- Sidebar -->
