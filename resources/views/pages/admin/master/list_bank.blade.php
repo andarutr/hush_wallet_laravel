@@ -128,6 +128,7 @@ function notifySuccess(message){
 
     $("input").val('');
     $(".modalHush").modal("hide");
+    $("#btnRemoveChoose").hide();
     table.ajax.reload();
 }
 
