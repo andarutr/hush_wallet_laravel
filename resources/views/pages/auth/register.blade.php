@@ -49,16 +49,6 @@ function notifyError(title, icon, message){
     });
 }
 
-$(document).on("click", "#showPassword", function(){
-    let passwordForm = $("#passwordForm");
-
-    if(passwordForm.attr("type") == "password"){
-        passwordForm.attr("type", "text");
-    }else if(passwordForm.attr("type") == "text"){
-        passwordForm.attr("type", "password");
-    }
-});
-
 $(document).on("click", "#btnRegister", function(){
     let namaLengkapForm = $("#namaLengkapForm").val();
     let emailForm = $("#emailForm").val();
