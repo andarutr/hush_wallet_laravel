@@ -35,7 +35,7 @@
 <div class="modal fade" id="modal">
     <div class="modal-dialog modal-dialog-centered mw-650px">
         <div class="modal-content">
-            <div class="modal-header" id="kt_modal_add_customer_header">
+            <div class="modal-header">
                 <h2 class="fw-bolder" id="judulModal"></h2>
             </div>
             <div class="modal-body py-10 px-lg-17" id="contentModal"></div>

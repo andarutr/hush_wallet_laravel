@@ -9,6 +9,10 @@ Route::get('/u/dashboard', function () {
 });
 
 Route::get('/u/wallet', [WalletController::class, 'index']);
+Route::get('/u/wallet/getData', [WalletController::class, 'getData']);
+Route::post('/u/wallet/store', [WalletController::class, 'store']);
+Route::put('/u/wallet/update', [WalletController::class, 'update']);
+Route::delete('/u/wallet/remove', [WalletController::class, 'remove']);
 
 Route::get('/u/wallet/transaksi-in/{id_transaction}', function () {
     $data['title'] = 'Wallet Transaksi IN';
