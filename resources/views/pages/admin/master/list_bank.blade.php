@@ -1,58 +1,44 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card" id="tasksList">
-            <div class="card-header border-0">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Master Data Bank</h5>
-                    <div class="flex-shrink-0">
-                        <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-sm btn-primary" id="btnShowModal"><i
-                                    class="ri-add-line align-bottom me-1"></i> Tambah Data</button>
-                            <button class="btn btn-soft-secondary" id="remove-actions" onClick="deleteMultiple()"><i
-                                    class="ri-delete-bin-2-line"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end card-body-->
-            <div class="card-body">
-                <div class="table-card mb-4">
-                    <table class="table" id="masterBankTable">
-                        <thead class="table-light text-muted">
-                            <tr>
-                                <th scope="col" style="width: 40px;">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                    </div>
-                                </th>
-                                <th class="sort">Logo</th>
-                                <th class="sort">Nama Bank</th>
-                                <th class="sort">Dibuat</th>
-                                <th class="sort">Diperbarui</th>
-                                <th class="sort">Action</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+<div class="card">
+    <div class="card-header border-0 pt-6">
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" id="btnShowModal">Tambah Data</button>
             </div>
         </div>
-        <button class="btn btn-sm btn-danger mb-5" id="btnRemoveChoose"><i class="mdi mdi-trash-can"></i> hapus</button>
+    </div>
+
+    <div class="card-body pt-0">
+        <table class="table align-middle table-row-dashed fs-6 gy-5" id="masterBankTable">
+            <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                    <th class="w-10px pe-2">
+                        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                            <input class="form-check-input" type="checkbox" id="checkAll" />
+                        </div>
+                    </th>
+                    <th>Logo</th>
+                    <th>Nama Bank</th>
+                    <th>Dibuat</th>
+                    <th>Diperbarui</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </div>
+<button class="btn btn-danger btn-sm mt-4" id="btnRemoveChoose"><i class="bi bi-trash"></i> hapus</button>
 
-{{-- id="removeNotificationModal" jangan dihapus --}}
-<div class="modal fade zoomIn modalHush" id="removeNotificationModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 bg-info-subtle">
-                <h5 class="modal-title" id="judulModal"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    id="close-modal"></button>
+{{-- Modal --}}
+<div class="modal fade" id="modal">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header" id="kt_modal_add_customer_header">
+                <h2 class="fw-bolder" id="judulModal"></h2>
             </div>
-            <div class="modal-body" id="contentModal"></div>
+            <div class="modal-body py-10 px-lg-17" id="contentModal"></div>
         </div>
     </div>
 </div>
@@ -64,7 +50,7 @@
 $("#btnRemoveChoose").hide();
 
 let table = $("#masterBankTable").DataTable({
-    searching: false,
+    searching: true,
     serverSide: true,
     info: false,
     paging: false,
@@ -82,7 +68,7 @@ let table = $("#masterBankTable").DataTable({
         {
             data: "picture",
             render: function(data,type, row){
-                return `<img src="/assets/images/banks/${data}" class="img-fluid rounded" width="50">`
+                return `<img src="/assets/media/banks/${data}" class="img-fluid rounded" width="50">`
             }
         },
         {
@@ -104,7 +90,7 @@ let table = $("#masterBankTable").DataTable({
         },
         {
             render: function(data, type, row){
-                return `<button class="btn btn-sm btn-danger btnRemove" data-id="${row.id}"><i class="mdi mdi-trash-can"></i></button>`;
+                return `<button class="btn btn-sm btn-danger btnRemove" data-id="${row.id}"><i class="bi bi-trash"></i></button>`;
             }
         },
     ]
@@ -144,23 +130,23 @@ $(document).on("click", "#btnShowModal", function(){
     $("#judulModal").text("Tambah Master Data Bank");
 
     $("#contentModal").empty().append(`
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Nama Bank</label>
-                    <input class="form-control" id="namaBankForm">   
+        <div class="scroll-y me-n7 pe-7">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Bank</label>
+                        <input class="form-control form-control-solid" id="namaBankForm">   
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label">Foto Logo</label>
+                        <input type="file" id="pictureForm" class="form-control">
+                    </div>
                 </div>
             </div>
-
-            <div class="col-sm-6">
-                <div class="mb-3">
-                    <label class="form-label">Foto Logo</label>
-                    <input type="file" id="pictureForm" class="form-control">
-                </div>
-            </div>
+            <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
         </div>
-
-        <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
     `);
     
     $(document).on("click", "#btnSubmit", function(){
@@ -193,7 +179,7 @@ $(document).on("click", "#btnShowModal", function(){
         })
     });
 
-    $(".modalHush").modal("show");
+    $("#modal").modal("show");
 });
 
 $(document).on("click", "#btnRemoveChoose", function(){

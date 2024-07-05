@@ -11,6 +11,7 @@ class MasterBankController extends Controller
     public function getData()
     {
         $master_bank = MasterBank::all();
+        
         return response()->json([
             'data' => $master_bank
         ]);
