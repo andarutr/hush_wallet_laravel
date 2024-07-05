@@ -1,44 +1,26 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6 col-xl-5">
-            <div class="card mt-4">
-                <div class="card-body p-4">
-                    <div class="text-center mt-2">
-                      <center>
-                        <img src="/assets/images/hush.png" class="img-fluid" width="150">
-                      </center>
-                        <h4 class="text-primary">LOGIN</h4>
-                        <p class="text-muted">Silahkan login</p>
-                    </div>
-                    <div class="p-2 mt-4">
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailForm" placeholder="Masukkan email">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <div class="position-relative auth-pass-inputgroup mb-3">
-                                <input type="password" class="form-control pe-5 password-input" id="passwordForm" placeholder="Masukkan password">
-                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                            </div>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
-                            <label class="form-check-label" for="auth-remember-check">Remember me</label>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn btn-success w-100" id="btnLogin">Login</button>
-                        </div>
-                        <p class="mt-3">Tidak memiliki akun ? <a href="/register">Register</a></p>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-        </div>
+<div class="text-center mb-10">
+    <h1 class="text-dark mb-3">Login</h1>
+    <div class="text-gray-400 fw-bold fs-4">Belum memiliki akun?
+    <a href="/register" class="link-primary fw-bolder">Daftar disini...</a></div>
+</div>
+
+<div class="fv-row mb-10">
+    <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+    <input class="form-control form-control-lg form-control-solid" type="text" id="emailForm" autocomplete="off" />
+</div>
+
+<div class="fv-row mb-10">
+    <div class="d-flex flex-stack mb-2">
+        <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
     </div>
+    <input class="form-control form-control-lg form-control-solid" type="password" id="passwordForm" autocomplete="off" />
+</div>
+
+<div class="text-center">
+    <button type="submit" id="btnLogin" class="btn btn-lg btn-primary w-100 mb-5">Login</button>
 </div>
 @endsection
 
@@ -51,6 +33,16 @@ function notifyError(title, icon, message){
         html: message
     });
 }
+
+$(document).on("click", "#showPassword", function(){
+    let passwordForm = $("#passwordForm");
+
+    if(passwordForm.attr("type") == "password"){
+        passwordForm.attr("type", "text");
+    }else if(passwordForm.attr("type") == "text"){
+        passwordForm.attr("type", "password");
+    }
+});
 
 $(document).on("click", "#btnLogin", function(){
     let emailForm = $("#emailForm").val();

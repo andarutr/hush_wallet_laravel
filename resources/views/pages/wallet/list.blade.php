@@ -13,8 +13,7 @@
             <!--end col-->
             <div class="col-md-auto ms-auto">
                 <div class="d-flex hastck gap-2 flex-wrap">
-                    <button data-bs-toggle="modal" data-bs-target="#adddeals" class="btn btn-success"><i
-                            class="ri-add-fill align-bottom me-1"></i> Tambah Dompet</button>
+                    <button class="btn btn-success" id="btnTambahDompetModal"><i class="ri-add-fill align-bottom me-1"></i> Tambah Dompet</button>
                 </div>
             </div>
             <!--end col-->
@@ -28,7 +27,7 @@
     <div class="col">
         <div class="collapse show" id="bankMandiri">
             <div class="card mb-1 ribbon-box ribbon-fill ribbon-sm">
-                <div class="ribbon ribbon-danger" style="cursor: pointer;"><i class="ri-delete-bin-line"></i></div>
+                <div class="ribbon ribbon-danger cardRemove" style="cursor: pointer;"><i class="ri-delete-bin-line"></i></div>
                 <div class="card-body">
                     <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#bankMandiri8" role="button"
                         aria-expanded="false" aria-controls="bankMandiri8">
@@ -115,44 +114,50 @@
     </div>
 </div>
 
-<div class="modal fade" id="adddeals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade zoomIn modalHush" id="removeNotificationModal">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-light p-3">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Dompet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-info-subtle">
+                <h5 class="modal-title" id="judulModal"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    id="close-modal"></button>
             </div>
-            <form class="needs-validation" novalidate id="deals-form" onsubmit="return false">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="deatType" class="form-label">Jenis Dompet</label>
-                        <select class="form-select" id="deatType" data-choices aria-label="Default select example"
-                            required>
-                            <option value="">Pilih jenis</option>
-                            <option value="Cash">Cash</option>
-                            <option value="Cashless">Cashless</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">No. Rekening</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama Bank</label>
-                        <input type="text" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nominal</label>
-                        <input type="number" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i>
-                        Save</button>
-                </div>
-            </form>
+            <div class="modal-body" id="contentModal"></div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('script')
+<script>
+$(document).on("click", "#btnTambahDompetModal", function(){
+    $("#judulModal").text("Tambah Data Dompet");
+
+    $("#contentModal").empty().append(`
+        <div class="mb-3">
+            <label for="deatType" class="form-label">Jenis Dompet</label>
+            <select class="form-select" id="deatType" data-choices aria-label="Default select example"
+                required>
+                <option value="">Pilih jenis</option>
+                <option value="Cash">Cash</option>
+                <option value="Cashless">Cashless</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">No. Rekening</label>
+            <input type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nama Bank</label>
+            <input type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nominal</label>
+            <input type="number" class="form-control" required>
+        </div>
+    `);
+
+    $("#removeNotificationModal").modal("show");
+});
+</script>
+@endpush

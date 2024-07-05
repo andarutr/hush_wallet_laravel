@@ -1,36 +1,32 @@
-<!doctype html>
-<html lang="en" data-layout="horizontal" data-topbar="dark" data-sidebar-size="lg" data-sidebar="light" data-sidebar-image="none" data-preloader="disable">
-<head>
-    <meta charset="utf-8" />
-    <title>{{ $title ?? '-' }} | Hush Wallet</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
-    <script src="/assets/js/layout.js"></script>
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
-    @stack('styles')
-</head>
-<body style="background-color: #6691E7;">
-    <div class="auth-page-wrapper pt-5">
-        <div class="auth-page-content">
-            @yield('content')
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{ $title ?? '' }} | Hush Wallet</title>
+		<meta charset="utf-8" />
+		<link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+        @stack('styles')
+	</head>
+	<body id="kt_body" class="bg-body">
+		<div class="d-flex flex-column flex-root">
+			<div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed" style="background-image: url(assets/media/illustrations/sigma-1/14.png">
+				<div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+					<a href="/login" class="mb-12">
+						<img alt="Logo" src="{{ asset('assets/media/logos/hush.png')}}" class="img-fluid" width="150" />
+					</a>
+					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+                        @yield('content')
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- JAVASCRIPT -->
-    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
-    <script src="/assets/libs/node-waves/waves.min.js"></script>
-    <script src="/assets/libs/feather-icons/feather.min.js"></script>
-    <script src="/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-    <script src="/assets/js/plugins.js"></script>
-    <script src="/assets/libs/particles.js/particles.js"></script>
-    <script src="/assets/js/pages/particles.app.js"></script>
-    <script src="/assets/js/pages/password-addon.init.js"></script>
-    <script src="/assets/js/swal2.min.js"></script>
-    <script src="/assets/js/jquery.min.js"></script>
-    @stack('scripts')
-</body>
+		<script>var hostUrl = "assets/";</script>
+		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+		<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+		<script src="{{ asset('assets/js/custom/authentication/sign-in/general.js') }}"></script>
+        @stack('scripts')
+	</body>
 </html>
