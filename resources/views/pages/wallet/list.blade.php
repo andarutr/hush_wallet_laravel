@@ -236,9 +236,7 @@ $(document).on("click", ".btnRemove", function(){
                 type: "DELETE", 
                 url: "/u/wallet/remove",
                 data: {
-                    data: {
-                        id
-                    }
+                    id
                 },
                 success: function(res){
                     notifySuccess(res.message);
