@@ -39,6 +39,14 @@
                                 <span class="menu-title">Bank</span>
                             </a>
                         </div>
+                        <div class="menu-item menu-accordion">
+                            <a class="menu-link" href="/su/master/platform">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Platform</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 @else

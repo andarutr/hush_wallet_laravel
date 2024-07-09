@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MasterBankController;
+use App\Http\Controllers\MasterPlatformController;
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/su/dashboard', function () {
@@ -9,9 +10,23 @@ Route::middleware(['auth'])->group(function(){
         return view('pages.admin.dashboard', $data);
     });
 
-    Route::get('/su/master/bank', [MasterBankController::class, 'index']);
-    Route::get('/su/master/bank/getData', [MasterBankController::class, 'getData']);
-    Route::post('/su/master/bank/store', [MasterBankController::class, 'store']);
-    Route::delete('/su/master/bank/remove', [MasterBankController::class, 'remove']);
-    Route::delete('/su/master/bank/removeChoose', [MasterBankController::class, 'removeChoose']);
+    // Master Data
+    Route::prefix('/su/master')->group(function(){
+        // Bank
+        Route::prefix('/bank')->group(function(){
+            Route::get('/', [MasterBankController::class, 'index']);
+            Route::get('/getData', [MasterBankController::class, 'getData']);
+            Route::post('/store', [MasterBankController::class, 'store']);
+            Route::delete('/remove', [MasterBankController::class, 'remove']);
+            Route::delete('/removeChoose', [MasterBankController::class, 'removeChoose']);
+        });
+        // Platform
+        Route::prefix('/platform')->group(function(){
+            Route::get('/', [MasterPlatformController::class, 'index']);
+            Route::get('/getData', [MasterPlatformController::class, 'getData']);
+            Route::post('/store', [MasterPlatformController::class, 'store']);
+            Route::delete('/remove', [MasterPlatformController::class, 'remove']);
+            Route::delete('/removeChoose', [MasterPlatformController::class, 'removeChoose']);
+        });
+    });
 });
