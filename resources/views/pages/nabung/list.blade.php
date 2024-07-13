@@ -18,6 +18,7 @@
             <div class="card-body pt-5" id="kt_chat_contacts_body">
                 <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto">
                     <div id="savingCard"></div>
+                    <a href="/u/nabung/transaksi">Selengkapnya</a>
                 </div>
             </div>
         </div>
@@ -41,38 +42,6 @@
 
 @push('scripts')
 <script>
-function main(){
-    $("#contentForm").empty().append(`
-        <div class="mb-3">
-            <label class="form-label">Jenis Tabungan</label>
-            <select class="form-select form-select-solid" id="jenisTabunganForm">
-                <option value="">Pilih jenis</option>
-                <option value="Jangka Pendek">Jangka Pendek</option>
-                <option value="Jangka Panjang">Jangka Panjang</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Platform</label>
-            <select class="form-select form-select-solid" id="platformForm">
-                <option value="">Pilih jenis</option>
-                @foreach($nabung as $nb)
-                <option value="{{ $nb->nama_platform }}">{{ $nb->nama_platform }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Nominal</label>
-            <input type="number" class="form-control form-control-solid" id="nominalForm">
-        </div>
-        <div class="mb-3">
-            <a href="javascript:;" id="statusCatatan">Tambahkan catatan?</a>
-            <label class="form-label" id="labelCatatan">Catatan</label>
-            <textarea class="form-control form-control-solid" id="catatanForm"></textarea>
-        </div>
-        <button class="btn btn-primary mt-3" id="btnSubmit">Submit</button>
-    `);
-}
-
 function notifySuccessSwal(message){
     Swal.fire({
         icon: 'success',
@@ -95,22 +64,59 @@ function resetForm(){
     $("textarea").val('');
 }
 
+function form(){
+    $("#contentForm").empty().append(`
+        <div class="mb-3">
+            <label class="form-label">Jenis Tabungan</label>
+            <select class="form-select form-select-solid" id="jenisTabunganForm" data-hide-search="true" data-control="select2" data-placeholder="Pilih">
+                <option></option>
+                <option value="Jangka Pendek">Jangka Pendek</option>
+                <option value="Jangka Panjang">Jangka Panjang</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Platform</label>
+            <select class="form-select form-select-solid" data-hide-search="true" data-control="select2" id="platformForm" data-placeholder="Pilih">
+                <option></option>
+                @foreach($nabung as $nb)
+                <option value="{{ $nb->nama_platform }}">{{ $nb->nama_platform }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nominal</label>
+            <input type="number" class="form-control form-control-solid" id="nominalForm">
+        </div>
+        <div class="mb-3">
+            <a href="javascript:;" onClick="showCatatan()">Tambahkan catatan?</a>
+            <label class="form-label" id="labelCatatan">Catatan</label>
+            <textarea class="form-control form-control-solid" id="catatanForm"></textarea>
+        </div>
+        <button class="btn btn-primary mt-3" id="btnSubmit">Submit</button>
+    `);
+}
+
+form();
+
 function savingCard(){
     $.ajax({
         type: "GET",
         url: "/u/nabung/getData",
         success: function(res){
-            res.forEach(item => {
-                let formattedDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            let html = '';
 
-                let html = `
+            res.forEach(item => {
+                let formattedDate = moment(item.created_at).format("DD MMMM YYYY");
+                let rupiah = new Intl.NumberFormat("id-ID", { style: 'currency', currency: 'IDR' }).format(item.nominal);
+
+                html += `
                 <div class="d-flex flex-stack py-4">
                     <div class="d-flex align-items-center">
                         <div class="symbol symbol-45px symbol-circle">
-                            <img src="/assets/media/platforms/${res.picture}" class="img-fluid" />
+                            <img src="/assets/media/platforms/${item.picture}" class="img-fluid" />
                         </div>
                         <div class="ms-5">
-                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Rp ${item.nominal}</a>
+                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Rp ${rupiah}</a>
                             <div class="fw-bold text-muted">${item.platform}</div>
                         </div>
                     </div>
@@ -121,24 +127,20 @@ function savingCard(){
                 `;
             });
 
-            $("#savingCard").empty().append(`
-            
-            `);
+            $("#savingCard").append(html);
         }
     })
 }
 
-main();
 savingCard();
 
-$(document).on("click", "#statusCatatan", function(){
+function showCatatan(){
     $("#statusCatatan").hide("slow");
     $("#labelCatatan").show("slow");
     $("#catatanForm").show("slow");
-});
+}
 
-$(document).off("click", "#btnSubmit");
-$(document).on("click", "#btnSubmit", function(){
+function store(){
     let jenisTabunganForm = $("#jenisTabunganForm").val();
     let platformForm = $("#platformForm").val();
     let nominalForm = $("#nominalForm").val();
@@ -154,9 +156,8 @@ $(document).on("click", "#btnSubmit", function(){
             catatan: catatanForm
         },
         success: function(res){
-            resetForm();
-
             notifySuccessSwal(res.message);
+            resetForm();
         },
         error: function(xhr){
             let errors = xhr.responseJSON.errors;
@@ -168,6 +169,6 @@ $(document).on("click", "#btnSubmit", function(){
             notifyErrorSwal(message);
         }
     });
-});
+}
 </script>
 @endpush

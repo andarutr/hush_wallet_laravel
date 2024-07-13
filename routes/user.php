@@ -25,13 +25,17 @@ Route::get('/u/wallet/transaksi-out/{id_transaction}', function () {
     return view('pages.wallet.transaction_out', $data);
 });
 
-Route::get('/u/nabung', [NabungController::class, 'index']);
-Route::get('/u/nabung/getData', [NabungController::class, 'getData']);
-Route::post('/u/nabung/store', [NabungController::class, 'store']);
-
-Route::get('/u/nabung/selengkapnya', function () {
-    $data['title'] = 'Detail Nabung';
-    return view('pages.nabung.all', $data);
+Route::prefix('/u/nabung')->group(function(){
+    Route::get('/', [NabungController::class, 'index']);
+    Route::get('/getData', [NabungController::class, 'getData']);
+    Route::post('/store', [NabungController::class, 'store']);
+    
+    Route::get('/transaksi', [NabungController::class, 'list_transaksi']);
+    Route::get('/transaksi/getData', [NabungController::class, 'getDataTransaksi']);
+    Route::get('/transaksi/getDataFirst', [NabungController::class, 'getDataTransaksiFirst']);
+    Route::put('/transaksi/update', [NabungController::class, 'update']);
+    Route::delete('/transaksi/remove', [NabungController::class, 'remove']);
+    Route::delete('/transaksi/removeChoose', [NabungController::class, 'removeChoose']);
 });
 
 Route::get('/u/goals', function () {
