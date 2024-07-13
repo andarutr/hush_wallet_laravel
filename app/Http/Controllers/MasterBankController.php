@@ -44,7 +44,7 @@ class MasterBankController extends Controller
         }else{
             $picture = $req->file('picture');
             $pictureName = time() . '.' . $picture->getClientOriginalExtension();
-            $picture->move(public_path('assets/images/banks'), $pictureName);
+            $picture->move(public_path('assets/media/banks'), $pictureName);
             
             $master_bank = new MasterBank();
             $master_bank->nama_bank = $req->nama_bank;

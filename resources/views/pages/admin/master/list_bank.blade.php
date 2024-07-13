@@ -5,7 +5,7 @@
     <div class="card-header border-0 pt-6">
         <div class="card-toolbar">
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" id="btnShowModal">Tambah Data</button>
+                <button type="button" class="btn btn-primary" onClick="showModal()">Tambah Data</button>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
         </table>
     </div>
 </div>
-<button class="btn btn-danger btn-sm mt-4" id="btnRemoveChoose"><i class="bi bi-trash"></i> hapus</button>
+<button class="btn btn-danger btn-sm mt-4" id="btnRemoveChoose" onClick="removeChoose()"><i class="bi bi-trash"></i> hapus</button>
 
 {{-- Modal --}}
 <div class="modal fade" id="modal">
@@ -49,62 +49,6 @@
 <script>
 $("#btnRemoveChoose").hide();
 
-let table = $("#masterBankTable").DataTable({
-    searching: true,
-    serverSide: true,
-    info: false,
-    paging: false,
-    ordering: false,
-    ajax: {
-        type: "GET",
-        url: "/su/master/bank/getData"
-    },
-    columns: [
-        {
-            render: function(data, type, row){
-                return `<input type="checkbox" class="form-check-input checkwish" value="${row.id}">`;
-            }
-        },
-        {
-            data: "picture",
-            render: function(data,type, row){
-                return `<img src="/assets/media/banks/${data}" class="img-fluid rounded" width="50">`
-            }
-        },
-        {
-            data: "nama_bank"
-        },
-        {
-            data: "created_at",
-            render: function(data, type, row){
-                let created_at = moment(data).format('LL');
-                return `${created_at}`;
-            }
-        },
-        {
-            data: "updated_at",
-            render: function(data, type, row){
-                let updated_at = moment(data).format('LL');
-                return `${updated_at}`;
-            }
-        },
-        {
-            render: function(data, type, row){
-                return `<button class="btn btn-sm btn-danger btnRemove" data-id="${row.id}"><i class="bi bi-trash"></i></button>`;
-            }
-        },
-    ]
-});
-
-$(document).on("change", ".checkwish", function() {
-    let anyChecked = $('.checkwish:checked').length > 0;
-    if (anyChecked) {
-        $('#btnRemoveChoose').show();
-    } else {
-        $('#btnRemoveChoose').hide();
-    }
-});
-
 function notifySuccess(message){
     Swal.fire({
         title: "Berhasil",
@@ -115,7 +59,6 @@ function notifySuccess(message){
     $("input").val('');
     $(".modalHush").modal("hide");
     $("#btnRemoveChoose").hide();
-    table.ajax.reload();
 }
 
 function notifyError(message){
@@ -126,10 +69,67 @@ function notifyError(message){
     });
 }
 
-$(document).on("click", "#btnShowModal", function(){
-    $("#judulModal").text("Tambah Master Data Bank");
+$(document).on("change", ".checkwish", function() {
+    let anyChecked = $('.checkwish:checked').length > 0;
+    if (anyChecked) {
+        $('#btnRemoveChoose').fadeIn();
+    } else {
+        $('#btnRemoveChoose').fadeOut();
+    }
+});
 
-    $("#contentModal").empty().append(`
+function table(){
+    $("#masterBankTable").DataTable({
+        searching: true,
+        serverSide: true,
+        info: false,
+        paging: false,
+        ordering: false,
+        bDestroy: true,
+        ajax: {
+            type: "GET",
+            url: "/su/master/bank/getData"
+        },
+        columns: [
+            {
+                render: function(data, type, row){
+                    return `<input type="checkbox" class="form-check-input checkwish" value="${row.id}">`;
+                }
+            },
+            {
+                data: "picture",
+                render: function(data,type, row){
+                    return `<img src="/assets/media/banks/${data}" class="img-fluid rounded" width="50">`
+                }
+            },
+            {
+                data: "nama_bank"
+            },
+            {
+                data: "created_at",
+                render: function(data, type, row){
+                    let created_at = moment(data).format('LL');
+                    return `${created_at}`;
+                }
+            },
+            {
+                data: "updated_at",
+                render: function(data, type, row){
+                    let updated_at = moment(data).format('LL');
+                    return `${updated_at}`;
+                }
+            },
+            {
+                render: function(data, type, row){
+                    return `<button class="btn btn-sm btn-danger" onClick="remove(${row.id})"><i class="bi bi-trash"></i></button>`;
+                }
+            },
+        ]
+    });
+}
+
+function form(){
+    $("#contentModal").append(`
         <div class="scroll-y me-n7 pe-7">
             <div class="row">
                 <div class="col-sm-6">
@@ -145,44 +145,46 @@ $(document).on("click", "#btnShowModal", function(){
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+            <button type="button" class="btn btn-primary" onClick="store()">Submit</button>
         </div>
     `);
-    
-    $(document).on("click", "#btnSubmit", function(){
-        let namaForm = $("#namaBankForm").val();
-        let pictureForm = $("#pictureForm")[0].files[0];
+}
 
-        let formData = new FormData();
-        formData.append("nama_bank", namaForm);
-        formData.append("picture", pictureForm);
+table();
 
-        $.ajax({
-            type: "POST",
-            url: "/su/master/bank/store",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(res){
-                notifySuccess(res.message);
-            },
-            error: function(xhr){
-                let errors = xhr.responseJSON.errors;
-                let message = '';
+function store(){
+    let namaForm = $("#namaBankForm").val();
+    let pictureForm = $("#pictureForm")[0].files[0];
 
-                $.each(errors, function(key, value) {
-                    message += value[0] + '<br>';
-                });
+    let formData = new FormData();
+    formData.append("nama_bank", namaForm);
+    formData.append("picture", pictureForm);
 
-                notifyError(message);
-            }
-        })
+    $.ajax({
+        type: "POST",
+        url: "/su/master/bank/store",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(res){
+            $("#modal").modal("hide");
+            notifySuccess(res.message);
+            table();
+        },
+        error: function(xhr){
+            let errors = xhr.responseJSON.errors;
+            let message = '';
+
+            $.each(errors, function(key, value) {
+                message += value[0] + '<br>';
+            });
+
+            notifyError(message);
+        }
     });
+}
 
-    $("#modal").modal("show");
-});
-
-$(document).on("click", "#btnRemoveChoose", function(){
+function removeChoose(){
     let dataToSend = [];
     $("#masterBankTable tbody input[type=checkbox].checkwish:checked").each(function(){
         checkwishId = $(this).val();
@@ -208,15 +210,14 @@ $(document).on("click", "#btnRemoveChoose", function(){
                 },
                 success: function(res){
                     notifySuccess(res.message);
+                    table();
                 }
             });
         }
     });
-});
+}
 
-$(document).on("click", ".btnRemove", function(){
-    let id = $(this).data("id");
-
+function remove(id){
     Swal.fire({
         title: "Konfirmasi",
         icon: "info",
@@ -235,10 +236,21 @@ $(document).on("click", ".btnRemove", function(){
                 },
                 success: function(res){
                     notifySuccess(res.message);
+                    table();
                 }
             });
         }
     });
-});
+}
+
+function showModal(){
+    $("#judulModal").text("Tambah Master Data Bank");
+
+    $("#contentModal").empty();
+    
+    form();
+
+    $("#modal").modal("show");
+}
 </script>
 @endpush

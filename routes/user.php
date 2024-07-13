@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NabungController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
 
@@ -24,10 +25,9 @@ Route::get('/u/wallet/transaksi-out/{id_transaction}', function () {
     return view('pages.wallet.transaction_out', $data);
 });
 
-Route::get('/u/nabung', function () {
-    $data['title'] = 'Nabung';
-    return view('pages.nabung.list', $data);
-});
+Route::get('/u/nabung', [NabungController::class, 'index']);
+Route::get('/u/nabung/getData', [NabungController::class, 'getData']);
+Route::post('/u/nabung/store', [NabungController::class, 'store']);
 
 Route::get('/u/nabung/selengkapnya', function () {
     $data['title'] = 'Detail Nabung';

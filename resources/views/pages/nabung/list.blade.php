@@ -16,36 +16,8 @@
                 <h5>List Menabung</h5>
             </div>
             <div class="card-body pt-5" id="kt_chat_contacts_body">
-                <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_chat_contacts_body" data-kt-scroll-offset="0px">
-                    <div class="d-flex flex-stack py-4">
-                        <div class="d-flex align-items-center">
-                            <div class="symbol symbol-45px symbol-circle">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRic1znecxO-qDy385l4Zd8VyPpZQgn_i7CkQ&s" />
-                            </div>
-                            <div class="ms-5">
-                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Rp 150.000</a>
-                                <div class="fw-bold text-muted">Nanovest (Saham)</div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-end ms-2">
-                            <span class="text-muted fs-7 mb-1">July 2024</span>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-stack py-4">
-                        <div class="d-flex align-items-center">
-                            <div class="symbol symbol-45px symbol-circle">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRic1znecxO-qDy385l4Zd8VyPpZQgn_i7CkQ&s" />
-                            </div>
-                            <div class="ms-5">
-                                <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Rp 500.000</a>
-                                <div class="fw-bold text-muted">Nanovest (Emas)</div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-end ms-2">
-                            <span class="text-muted fs-7 mb-1">July 2024</span>
-                        </div>
-                    </div>
-                    {{-- looping --}}
+                <div class="scroll-y me-n5 pe-5 h-200px h-lg-auto">
+                    <div id="savingCard"></div>
                 </div>
             </div>
         </div>
@@ -83,11 +55,9 @@ function main(){
             <label class="form-label">Platform</label>
             <select class="form-select form-select-solid" id="platformForm">
                 <option value="">Pilih jenis</option>
-                <option value="Ajaib">Ajaib</option>
-                <option value="Stockbit">Stockbit</option>
-                <option value="Nanovest (Saham)">Nanovest (Saham)</option>
-                <option value="Nanovest (Emas)">Nanovest (Emas)</option>
-                // Jangan lupa master datanya!
+                @foreach($nabung as $nb)
+                <option value="{{ $nb->nama_platform }}">{{ $nb->nama_platform }}</option>
+                @endforeach
             </select>
         </div>
         <div class="mb-3">
@@ -99,16 +69,105 @@ function main(){
             <label class="form-label" id="labelCatatan">Catatan</label>
             <textarea class="form-control form-control-solid" id="catatanForm"></textarea>
         </div>
-        <button class="btn btn-primary mt-3">Submit</button>
+        <button class="btn btn-primary mt-3" id="btnSubmit">Submit</button>
     `);
 }
 
+function notifySuccessSwal(message){
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: message,
+    });
+}
+
+function notifyErrorSwal(message){
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        html: message,
+    });
+}
+
+function resetForm(){
+    $("input").val('');
+    $("select").val('');
+    $("textarea").val('');
+}
+
+function savingCard(){
+    $.ajax({
+        type: "GET",
+        url: "/u/nabung/getData",
+        success: function(res){
+            res.forEach(item => {
+                let formattedDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                let html = `
+                <div class="d-flex flex-stack py-4">
+                    <div class="d-flex align-items-center">
+                        <div class="symbol symbol-45px symbol-circle">
+                            <img src="/assets/media/platforms/${res.picture}" class="img-fluid" />
+                        </div>
+                        <div class="ms-5">
+                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Rp ${item.nominal}</a>
+                            <div class="fw-bold text-muted">${item.platform}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-end ms-2">
+                        <span class="text-muted fs-7 mb-1">${formattedDate}</span>
+                    </div>
+                </div>
+                `;
+            });
+
+            $("#savingCard").empty().append(`
+            
+            `);
+        }
+    })
+}
+
 main();
+savingCard();
 
 $(document).on("click", "#statusCatatan", function(){
     $("#statusCatatan").hide("slow");
     $("#labelCatatan").show("slow");
     $("#catatanForm").show("slow");
+});
+
+$(document).off("click", "#btnSubmit");
+$(document).on("click", "#btnSubmit", function(){
+    let jenisTabunganForm = $("#jenisTabunganForm").val();
+    let platformForm = $("#platformForm").val();
+    let nominalForm = $("#nominalForm").val();
+    let catatanForm = $("#catatanForm").val();
+    
+    $.ajax({
+        type: "POST",
+        url: "/u/nabung/store",
+        data: {
+            jenis_tabungan: jenisTabunganForm,
+            platform: platformForm,
+            nominal: nominalForm,
+            catatan: catatanForm
+        },
+        success: function(res){
+            resetForm();
+
+            notifySuccessSwal(res.message);
+        },
+        error: function(xhr){
+            let errors = xhr.responseJSON.errors;
+			let message = '';
+			$.each(errors, function(key, value) {
+				message += value[0] + '<br>';
+			});
+
+            notifyErrorSwal(message);
+        }
+    });
 });
 </script>
 @endpush

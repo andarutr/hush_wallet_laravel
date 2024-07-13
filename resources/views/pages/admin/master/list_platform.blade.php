@@ -5,7 +5,7 @@
     <div class="card-header border-0 pt-6">
         <div class="card-toolbar">
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" id="btnShowModal">Tambah Data</button>
+                <button type="button" class="btn btn-primary" onClick="showModal()">Tambah Data</button>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
         </table>
     </div>
 </div>
-<button class="btn btn-danger btn-sm mt-4" id="btnRemoveChoose"><i class="bi bi-trash"></i> hapus</button>
+<button class="btn btn-danger btn-sm mt-4" id="btnRemoveChoose" onClick="removeChoose()"><i class="bi bi-trash"></i> hapus</button>
 
 {{-- Modal --}}
 <div class="modal fade" id="modal">
@@ -49,62 +49,6 @@
 <script>
 $("#btnRemoveChoose").hide();
 
-let table = $("#masterPlatformTable").DataTable({
-    searching: true,
-    serverSide: true,
-    info: false,
-    paging: false,
-    ordering: false,
-    ajax: {
-        type: "GET",
-        url: "/su/master/platform/getData"
-    },
-    columns: [
-        {
-            render: function(data, type, row){
-                return `<input type="checkbox" class="form-check-input checkwish" value="${row.id}">`;
-            }
-        },
-        {
-            data: "picture",
-            render: function(data,type, row){
-                return `<img src="/assets/media/platforms/${data}" class="img-fluid rounded" width="50">`
-            }
-        },
-        {
-            data: "nama_platform"
-        },
-        {
-            data: "created_at",
-            render: function(data, type, row){
-                let created_at = moment(data).format('LL');
-                return `${created_at}`;
-            }
-        },
-        {
-            data: "updated_at",
-            render: function(data, type, row){
-                let updated_at = moment(data).format('LL');
-                return `${updated_at}`;
-            }
-        },
-        {
-            render: function(data, type, row){
-                return `<button class="btn btn-sm btn-danger btnRemove" data-id="${row.id}"><i class="bi bi-trash"></i></button>`;
-            }
-        },
-    ]
-});
-
-$(document).on("change", ".checkwish", function() {
-    let anyChecked = $('.checkwish:checked').length > 0;
-    if (anyChecked) {
-        $('#btnRemoveChoose').show();
-    } else {
-        $('#btnRemoveChoose').hide();
-    }
-});
-
 function notifySuccess(message){
     Swal.fire({
         title: "Berhasil",
@@ -115,7 +59,6 @@ function notifySuccess(message){
     $("input").val('');
     $(".modalHush").modal("hide");
     $("#btnRemoveChoose").hide();
-    table.ajax.reload();
 }
 
 function notifyError(message){
@@ -126,9 +69,59 @@ function notifyError(message){
     });
 }
 
-$(document).on("click", "#btnShowModal", function(){
-    $("#judulModal").text("Tambah Master Data Bank");
+function table(){
+    $("#masterPlatformTable").DataTable({
+        searching: true,
+        serverSide: true,
+        info: false,
+        paging: false,
+        ordering: false,
+        bDestroy: true,
+        ajax: {
+            type: "GET",
+            url: "/su/master/platform/getData"
+        },
+        columns: [
+            {
+                render: function(data, type, row){
+                    return `<input type="checkbox" class="form-check-input checkwish" value="${row.id}">`;
+                }
+            },
+            {
+                data: "picture",
+                render: function(data,type, row){
+                    return `<img src="/assets/media/platforms/${data}" class="img-fluid rounded" width="50">`
+                }
+            },
+            {
+                data: "nama_platform"
+            },
+            {
+                data: "created_at",
+                render: function(data, type, row){
+                    let created_at = moment(data).format('LL');
+                    return `${created_at}`;
+                }
+            },
+            {
+                data: "updated_at",
+                render: function(data, type, row){
+                    let updated_at = moment(data).format('LL');
+                    return `${updated_at}`;
+                }
+            },
+            {
+                render: function(data, type, row){
+                    return `<button class="btn btn-sm btn-danger" id="btnRemove" onClick="remove(${row.id})"><i class="bi bi-trash"></i></button>`;
+                }
+            },
+        ]
+    });
+} 
 
+table();
+
+function form(){
     $("#contentModal").empty().append(`
         <div class="scroll-y me-n7 pe-7">
             <div class="row">
@@ -145,44 +138,79 @@ $(document).on("click", "#btnShowModal", function(){
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+            <button type="button" class="btn btn-primary" onClick="store()">Submit</button>
         </div>
     `);
-    
-    $(document).on("click", "#btnSubmit", function(){
-        let namaPlatformForm = $("#namaPlatformForm").val();
-        let pictureForm = $("#pictureForm")[0].files[0];
+}
 
-        let formData = new FormData();
-        formData.append("nama_platform", namaPlatformForm);
-        formData.append("picture", pictureForm);
+function store(){
+    let namaPlatformForm = $("#namaPlatformForm").val();
+    let pictureForm = $("#pictureForm")[0].files[0];
 
-        $.ajax({
-            type: "POST",
-            url: "/su/master/platform/store",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(res){
-                notifySuccess(res.message);
-            },
-            error: function(xhr){
-                let errors = xhr.responseJSON.errors;
-                let message = '';
+    let formData = new FormData();
+    formData.append("nama_platform", namaPlatformForm);
+    formData.append("picture", pictureForm);
 
-                $.each(errors, function(key, value) {
-                    message += value[0] + '<br>';
-                });
+    $.ajax({
+        type: "POST",
+        url: "/su/master/platform/store",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(res){
+            $("#modal").modal("hide");
+            notifySuccess(res.message);
+            table();
+        },
+        error: function(xhr){
+            let errors = xhr.responseJSON.errors;
+            let message = '';
 
-                notifyError(message);
-            }
-        })
+            $.each(errors, function(key, value) {
+                message += value[0] + '<br>';
+            });
+
+            notifyError(message);
+        }
     });
+}
 
-    $("#modal").modal("show");
+$(document).on("change", ".checkwish", function() {
+    let anyChecked = $('.checkwish:checked').length > 0;
+    if (anyChecked) {
+        $('#btnRemoveChoose').show();
+    } else {
+        $('#btnRemoveChoose').hide();
+    }
 });
 
-$(document).on("click", "#btnRemoveChoose", function(){
+function remove(id){
+    Swal.fire({
+        title: "Konfirmasi",
+        icon: "info",
+        text: "Yakin ingin menghapus data?",
+        
+        showCancelButton: true,
+        confirmButtonText: "Hapus",
+        confirmButtonColor: "#ED5E5E"
+    }).then((result) => {
+        if(result.isConfirmed){
+            $.ajax({
+                type: "DELETE", 
+                url: "/su/master/platform/remove",
+                data: {
+                    id
+                },
+                success: function(res){
+                    notifySuccess(res.message);
+                    table();
+                }
+            });
+        }
+    });
+}
+
+function removeChoose(){
     let dataToSend = [];
     $("#masterPlatformTable tbody input[type=checkbox].checkwish:checked").each(function(){
         checkwishId = $(this).val();
@@ -208,37 +236,21 @@ $(document).on("click", "#btnRemoveChoose", function(){
                 },
                 success: function(res){
                     notifySuccess(res.message);
+                    table();
                 }
             });
         }
     });
-});
+}
 
-$(document).on("click", ".btnRemove", function(){
-    let id = $(this).data("id");
+// Modal
+function showModal(){
+    $("#judulModal").text("Tambah Master Data Bank");
+    $("#contentModal").empty();
 
-    Swal.fire({
-        title: "Konfirmasi",
-        icon: "info",
-        text: "Yakin ingin menghapus data?",
-        
-        showCancelButton: true,
-        confirmButtonText: "Hapus",
-        confirmButtonColor: "#ED5E5E"
-    }).then((result) => {
-        if(result.isConfirmed){
-            $.ajax({
-                type: "DELETE", 
-                url: "/su/master/platform/remove",
-                data: {
-                    id
-                },
-                success: function(res){
-                    notifySuccess(res.message);
-                }
-            });
-        }
-    });
-});
+    form();
+
+    $("#modal").modal("show");
+}
 </script>
 @endpush
