@@ -9,7 +9,7 @@
             </div>
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label for="form-label">Tanggal</label>
                         <input type="date" class="form-control" id="tanggalFilter">
                     </div>
@@ -57,8 +57,8 @@
 $("#btnRemoveChoose").hide();
 
 $("#tanggalFilter").change(function(){
-    let search = $(this).val();
-    table().columns(6).search(search).draw();
+    let tgl = $(this).val();
+    table().columns(6).search(tgl).draw();
 });
 
 function notify(title, icon, message){

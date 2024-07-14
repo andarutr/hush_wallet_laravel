@@ -58,10 +58,34 @@ function notifyErrorSwal(message){
     });
 }
 
+function ajaxRequest(type, url, data){
+    $.ajax({
+        type: type,
+        url: url,
+        data: data,
+        success: function(res){
+            notifySuccessSwal("Berhasil membuat data!");
+            resetForm();
+            savingCard();
+        },
+        error: function(xhr){
+            let errors = xhr.responseJSON.errors;
+			let message = '';
+			$.each(errors, function(key, value) {
+				message += value[0] + '<br>';
+			});
+
+            notifyErrorSwal(message);
+        }
+    });
+}
+
 function resetForm(){
     $("input").val('');
     $("select").val('');
     $("textarea").val('');
+    // Trigger change khusus menggunakan plugin select 2
+    $("select").val('').trigger("change");
 }
 
 function form(){
@@ -92,7 +116,7 @@ function form(){
             <label class="form-label" id="labelCatatan">Catatan</label>
             <textarea class="form-control form-control-solid" id="catatanForm"></textarea>
         </div>
-        <button class="btn btn-primary mt-3" id="btnSubmit">Submit</button>
+        <button class="btn btn-primary mt-3" onClick="store()">Submit</button>
     `);
 }
 
@@ -127,7 +151,7 @@ function savingCard(){
                 `;
             });
 
-            $("#savingCard").append(html);
+            $("#savingCard").html(html);
         }
     })
 }
@@ -140,35 +164,23 @@ function showCatatan(){
     $("#catatanForm").show("slow");
 }
 
-function store(){
+function getValue(){
     let jenisTabunganForm = $("#jenisTabunganForm").val();
     let platformForm = $("#platformForm").val();
     let nominalForm = $("#nominalForm").val();
     let catatanForm = $("#catatanForm").val();
-    
-    $.ajax({
-        type: "POST",
-        url: "/u/nabung/store",
-        data: {
+
+    return {
             jenis_tabungan: jenisTabunganForm,
             platform: platformForm,
             nominal: nominalForm,
             catatan: catatanForm
-        },
-        success: function(res){
-            notifySuccessSwal(res.message);
-            resetForm();
-        },
-        error: function(xhr){
-            let errors = xhr.responseJSON.errors;
-			let message = '';
-			$.each(errors, function(key, value) {
-				message += value[0] + '<br>';
-			});
+        };
+}
 
-            notifyErrorSwal(message);
-        }
-    });
+function store(){
+    let data = getValue();
+    ajaxRequest("POST","/u/nabung/store", data);
 }
 </script>
 @endpush
