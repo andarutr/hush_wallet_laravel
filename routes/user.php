@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\NabungController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
@@ -43,10 +44,13 @@ Route::get('/u/goals', function () {
     return view('pages.goal.list', $data);
 });
 
-Route::get('/u/income', function () {
-    $data['title'] = 'List Income';
-    return view('pages.income.list', $data);
-});
+Route::get('/u/income', [IncomeController::class, 'index']);
+Route::get('/u/income/getData', [IncomeController::class, 'getData']);
+Route::get('/u/income/getDataSaldo', [IncomeController::class, 'getDataSaldo']);
+Route::get('/u/income/getDataFirst', [IncomeController::class, 'getDataFirst']);
+Route::post('/u/income/store', [IncomeController::class, 'store']);
+Route::put('/u/income/update', [IncomeController::class, 'update']);
+Route::delete('/u/income/remove', [IncomeController::class, 'remove']);
 
 Route::get('/u/income/laporan', function () {
     $data['title'] = 'Laporan Income';
