@@ -3,15 +3,15 @@
 @section('content')
 <div class="row">
     <div class="col-lg-8">
-        <div class="card" id="tasksList">
+        <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()">Tambah data</button>
+        <div class="card">
             <div class="card-body">
-                <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()">Tambah data</button>
                 <div class="table-responsive table-card mb-4">
                     <table class="table align-middle table-nowrap mb-0" id="tableIncome">
                         <thead class="table-light text-muted">
                             <tr>
                                 <th class="sort">ID Transaksi</th>
-                                <th class="sort">Jenis Pendapatan</th>
+                                <th class="sort">Jenis Pengeluaran</th>
                                 <th class="sort">Tgl</th>
                                 <th class="sort">Nominal</th>
                                 <th class="sort">Catatan</th>
@@ -19,18 +19,7 @@
                             </tr>
                         </thead>
                     </table>
-                    <!--end table-->
-                    <div class="noresult" style="display: none">
-                        <div class="text-center">
-                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                            <p class="text-muted mb-0">We've searched more than 200k+ tasks We did
-                                not find any tasks for you search.</p>
-                        </div>
-                    </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -79,7 +68,7 @@
 
 @push('scripts')
 <script>
-    function notifySwal(title, icon,message){
+    function notifySwal(title, icon, message){
         Swal.fire({
             title: title,
             icon: icon,
@@ -239,6 +228,7 @@
                 $("#modal").modal("hide");
                 notifySwal("berhasil","success", res.message);
                 tableIncome();
+                saldo();
             }, 
             error: function(xhr){
                 let errors = xhr.responseJSON.errors;
@@ -272,6 +262,7 @@
                 $("#modal").modal("hide");
                 notifySwal("berhasil","success", res.message);
                 tableIncome();
+                saldo();
             },
             error: function(xhr){
                 let errors = xhr.responseJSON.errors;
@@ -309,6 +300,7 @@
             }
         });
     }
+    
     // Modals
     function tambahModal() {
         $("#judulModal").text("Tambah Income");

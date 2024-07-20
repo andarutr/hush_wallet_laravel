@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\NabungController;
+use App\Http\Controllers\OutcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
 
@@ -44,25 +45,30 @@ Route::get('/u/goals', function () {
     return view('pages.goal.list', $data);
 });
 
-Route::get('/u/income', [IncomeController::class, 'index']);
-Route::get('/u/income/getData', [IncomeController::class, 'getData']);
-Route::get('/u/income/getDataSaldo', [IncomeController::class, 'getDataSaldo']);
-Route::get('/u/income/getDataFirst', [IncomeController::class, 'getDataFirst']);
-Route::post('/u/income/store', [IncomeController::class, 'store']);
-Route::put('/u/income/update', [IncomeController::class, 'update']);
-Route::delete('/u/income/remove', [IncomeController::class, 'remove']);
-
-Route::get('/u/income/laporan', function () {
-    $data['title'] = 'Laporan Income';
-    return view('pages.income.report', $data);
+Route::prefix('/u/income')->group(function(){
+    Route::get('/', [IncomeController::class, 'index']);
+    Route::get('/getData', [IncomeController::class, 'getData']);
+    Route::get('/getDataSaldo', [IncomeController::class, 'getDataSaldo']);
+    Route::get('/getDataFirst', [IncomeController::class, 'getDataFirst']);
+    Route::post('/store', [IncomeController::class, 'store']);
+    Route::put('/update', [IncomeController::class, 'update']);
+    Route::delete('/remove', [IncomeController::class, 'remove']);
+    Route::get('/laporan', function () {
+        $data['title'] = 'Laporan Income';
+        return view('pages.income.report', $data);
+    });
 });
 
-Route::get('/u/outcome', function () {
-    $data['title'] = 'List Outcome';
-    return view('pages.outcome.list', $data);
-});
-
-Route::get('/u/outcome/laporan', function () {
-    $data['title'] = 'Laporan Outcome';
-    return view('pages.outcome.report', $data);
+Route::prefix('/u/outcome')->group(function(){
+    Route::get('/', [OutcomeController::class, 'index']);
+    Route::get('/getData', [OutcomeController::class, 'getData']);
+    Route::get('/getDataNominal', [OutcomeController::class, 'getDataNominal']);
+    Route::get('/getDataFirst', [OutcomeController::class, 'getDataFirst']);
+    Route::post('/store', [OutcomeController::class, 'store']);
+    Route::put('/update', [OutcomeController::class, 'update']);
+    Route::delete('/remove', [OutcomeController::class, 'remove']);
+    Route::get('/laporan', function () {
+        $data['title'] = 'Laporan Outcome';
+        return view('pages.outcome.report', $data);
+    });
 });
