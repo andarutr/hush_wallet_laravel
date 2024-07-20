@@ -53,10 +53,8 @@ Route::prefix('/u/income')->group(function(){
     Route::post('/store', [IncomeController::class, 'store']);
     Route::put('/update', [IncomeController::class, 'update']);
     Route::delete('/remove', [IncomeController::class, 'remove']);
-    Route::get('/laporan', function () {
-        $data['title'] = 'Laporan Income';
-        return view('pages.income.report', $data);
-    });
+    Route::get('/laporan', [IncomeController::class, 'report']);
+    Route::get('/laporan/getData', [IncomeController::class, 'getDataReport']);
 });
 
 Route::prefix('/u/outcome')->group(function(){
@@ -67,8 +65,6 @@ Route::prefix('/u/outcome')->group(function(){
     Route::post('/store', [OutcomeController::class, 'store']);
     Route::put('/update', [OutcomeController::class, 'update']);
     Route::delete('/remove', [OutcomeController::class, 'remove']);
-    Route::get('/laporan', function () {
-        $data['title'] = 'Laporan Outcome';
-        return view('pages.outcome.report', $data);
-    });
+    Route::get('/laporan', [OutcomeController::class, 'report']);
+    Route::get('/laporan/getData', [OutcomeController::class, 'getDataReport']);
 });

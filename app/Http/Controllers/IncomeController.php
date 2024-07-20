@@ -33,7 +33,27 @@ class IncomeController extends Controller
 
     public function getData(Request $req)
     {
-        $income = Income::where('user_id', auth()->user()->id)->get();
+        $income = Income::where('user_id', auth()->user()->id)
+                        ->limit(5)->get();
+
+        return response()->json([
+            'data' => $income
+        ]);
+    }
+
+    public function getDataReport(Request $req)
+    {
+        if($req->jenis_filter == 'allData'){
+            $income = Income::where([
+                'user_id' => auth()->user()->id
+                ])->get(); 
+        }else{
+            $income = Income::where([
+                'user_id' => auth()->user()->id,
+                'tgl_income' => $req->tanggal_filter,
+                'jenis_pendapatan' => $req->jenis_filter
+                ])->get();
+        }
         return response()->json([
             'data' => $income
         ]);
@@ -43,6 +63,12 @@ class IncomeController extends Controller
     {
         $data['title'] = 'List Income';
         return view('pages.income.list', $data);
+    }
+
+    public function report()
+    {
+        $data['title'] = 'Laporan Income';
+        return view('pages.income.report', $data);
     }
 
     public function store(Request $req)

@@ -3,23 +3,32 @@
 @section('content')
 <div class="row">
     <div class="col-xl-12">
+        <button type="button" class="btn btn-danger btn-sm mb-3" onClick="notifySwal('Info','info','fitur belum dibuat!')"><i class="bi bi-download"></i> PDF</button>
         <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Laporan Outcome</h4>
-                <div class="flex-shrink-0">
-                    <button type="button" class="btn btn-soft-danger btn-sm">
-                        <i class="ri-file-list-3-line align-middle"></i> Download PDF
-                    </button>
-                </div>
-            </div><!-- end card header -->
-
             <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" id="tanggalFilter">
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="form-label">Jenis Pendapatan</label>
+                        <select class="form-select" id="jenisPendapatanFilter">
+                            <option value="allData">Semua data</option>
+                            <option value="keperluan sehari-hari">Keperluan Sehari-hari</option>
+                            <option value="hutang">Hutang</option>
+                            <option value="cicilan">Cicilan</option>
+                            <option value="keinginan">Keinginan</option>
+                            <option value="bulanan">Bulanan</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="table-responsive table-card">
-                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0" id="tableReportIncome">
                         <thead class="text-muted table-light">
                             <tr>
                                 <th scope="col">ID Transaksi</th>
-                                <th scope="col">Jenis Pendapatan</th>
+                                <th scope="col">Jenis Pengeluaran</th>
                                 <th scope="col">Tgl</th>
                                 <th scope="col">Nominal</th>
                                 <th scope="col">Catatan</th>
@@ -27,50 +36,80 @@
                                 <th scope="col">Diperbarui</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    #VZ211ASJKD22103
-                                </td>
-                                <td>
-                                    Bekerja
-                                </td>
-                                <td>01-07-2024</td>
-                                <td>
-                                    Rp 350.000
-                                </td>
-                                <td>Jokian cair RZA</td>
-                                <td>
-                                    01-07-2024
-                                </td>
-                                <td>
-                                    02-07-2024
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    #VZ211ASJKD22103
-                                </td>
-                                <td>
-                                    Bekerja
-                                </td>
-                                <td>01-07-2024</td>
-                                <td>
-                                    Rp 350.000
-                                </td>
-                                <td>Jokian cair RZA</td>
-                                <td>
-                                    01-07-2024
-                                </td>
-                                <td>
-                                    02-07-2024
-                                </td>
-                            </tr>
-                        </tbody><!-- end tbody -->
-                    </table><!-- end table -->
+                    </table>
                 </div>
             </div>
-        </div> <!-- .card-->
-    </div> <!-- .col-->
+        </div> 
+    </div> 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    let tanggalFilter = moment().format("YYYY-MM-DD");
+    let jenisPendapatanFilter = 'allData';
+
+    $("#tanggalFilter").val(tanggalFilter);
+    $("#jenisPendapatanFilter").val(jenisPendapatanFilter);
+
+    $(document).on("change", "#tanggalFilter", function(){
+        tanggalFilter = $("#tanggalFilter").val();
+        
+        table().columns(2).search(tanggalFilter).draw();
+    });
+   
+    $(document).on("change", "#jenisPendapatanFilter", function(){
+        jenisPendapatanFilter = $("#jenisPendapatanFilter").val();
+
+        table().columns(1).search(jenisPendapatanFilter).draw();
+    });
+
+    function notifySwal(title, icon, message){
+        Swal.fire({
+            title: title,
+            icon: icon,
+            html: message,
+        });
+    }
+
+    function table(){
+        $("#tableReportIncome").DataTable({
+            searching: false,
+            bDestroy: true,
+            ajax: {
+                type: "GET",
+                url: "/u/outcome/laporan/getData",
+                data: {
+                    tanggal_filter: tanggalFilter,
+                    jenis_filter: jenisPendapatanFilter
+                }
+            },
+            columns: [
+                { data: 'id_transaksi'},
+                { data: 'jenis_pengeluaran'},
+                { data: 'tgl'},
+                { data: 'nominal'},
+                { data: 'catatan'},
+                { 
+                    data: 'created_at',
+                    render: function(data, type, row){
+                        let dibuat = moment(data).format('d MMMM YYYY');
+
+                        return `${dibuat}`;
+                    }
+                },
+                { 
+                    data: 'updated_at',
+                    render: function(data, type, row){
+                        let diperbarui = moment(data).format('d MMMM YYYY');
+
+                        return `${diperbarui}`;
+                    }
+                }
+            ]
+        });
+    }
+
+    table();
+</script>
+@endpush

@@ -38,10 +38,34 @@ class OutcomeController extends Controller
         ]);
     }
 
+    public function getDataReport(Request $req)
+    {
+        if($req->jenis_filter == 'allData'){
+            $outcome = Outcome::where([
+                'user_id' => auth()->user()->id
+                ])->get(); 
+        }else{
+            $outcome = Outcome::where([
+                'user_id' => auth()->user()->id,
+                'tgl' => $req->tanggal_filter,
+                'jenis_pengeluaran' => $req->jenis_filter
+                ])->get();
+        }
+        return response()->json([
+            'data' => $outcome
+        ]);
+    }
+
     public function index()
     {
         $data['title'] = 'List Outcome';
         return view('pages.outcome.list', $data);
+    }
+
+    public function report()
+    {
+        $data['title'] = 'Laporan Outcome';
+        return view('pages.outcome.report', $data);
     }
 
     public function store(Request $req)
