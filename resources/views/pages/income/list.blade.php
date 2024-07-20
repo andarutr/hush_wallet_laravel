@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-lg-8">
-        <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()">Tambah data</button>
+        <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()"><i class="bi bi-plus-lg"></i>Tambah data</button>
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive table-card mb-4">
@@ -24,18 +24,9 @@
         </div>
     </div>
     <div class="col-xl-4 col-md-6">
-        <div class="card card-height-100">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Summary</h4>
-                <div class="flex-shrink-0">
-                    <a href="/u/income/laporan" class="btn btn-success btn-sm">
-                        Rekapan
-                    </a>
-                </div>
-            </div>
-
+        <a href="/u/income/laporan" class="btn btn-success btn-sm mb-3"><i class="bi bi-eye"></i>Rekapan</a>
+        <div class="card">
             <div class="card-body">
-
                 <div class="row align-items-center">
                     <div class="col-6 text-center">
                         <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Pemasukan</h6>
@@ -208,6 +199,7 @@
                 $("#contentModal").append(`
                 <div class="mb-3">
                     <label class="form-label">Jenis Pendapatan</label>
+                    <input type="hidden" id="walletForm" value="${res.wallet_id}">
                     <select class="form-select form-select-solid" id="jenisPendapatanForm" data-hide-search="true" data-control="select2">
                         <option value="${res.jenis_pendapatan}">${res.jenis_pendapatan}</option>
                         <option value="freelance">freelance</option>
@@ -271,6 +263,7 @@
     }
 
     function update(id){
+        let walletForm = $("#walletForm").val();
         let jenisPendapatanForm = $("#jenisPendapatanForm").val();
         let tglIncomeForm = $("#tglIncomeForm").val();
         let nominalForm = $("#nominalForm").val();
@@ -280,6 +273,7 @@
             type: "PUT",
             url: "/u/income/update",
             data: {
+                wallet_id: walletForm,
                 id: id,
                 jenis_pendapatan: jenisPendapatanForm,
                 tgl_income: tglIncomeForm,

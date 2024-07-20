@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-lg-8">
-        <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()">Tambah data</button>
+        <button class="btn btn-sm btn-primary mb-3" onClick="tambahModal()"><i class="bi bi-plus-lg"></i>Tambah data</button>
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive table-card mb-4">
@@ -23,19 +23,10 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-md-6">
-        <div class="card card-height-100">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Summary</h4>
-                <div class="flex-shrink-0">
-                    <a href="/u/outcome/laporan" class="btn btn-success btn-sm">
-                        Rekapan
-                    </a>
-                </div>
-            </div>
-
+    <div class="col-lg-4">
+        <a href="/u/outcome/laporan" class="btn btn-success btn-sm mb-3"><i class="bi bi-eye"></i>Rekapan</a>
+        <div class="card">
             <div class="card-body">
-
                 <div class="row align-items-center">
                     <div class="col-6 text-center">
                         <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Pengeluaran</h6>

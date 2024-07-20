@@ -130,6 +130,28 @@ class IncomeController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }else{
+            $income = Income::where('id', $req->id)->first();
+
+            if($income->nominal > $req->nominal){
+                // Jalankan jika nominal sebelumnya lebih besar 
+                // dari nominal ter-update
+                $jumlah = $income->nominal - $req->nominal;
+
+                Wallet::where('id', $req->wallet_id)
+                ->update([
+                    'saldo' => DB::raw('saldo - '.$jumlah) 
+                ]);
+            }elseif($income->nominal < $req->nominal){
+                // Jalankan jika nominal sebelumnya lebih kecil 
+                // dari nominal ter-update
+                $jumlah = $req->nominal - $income->nominal;
+
+                Wallet::where('id', $req->wallet_id)
+                ->update([
+                    'saldo' => DB::raw('saldo + '.$jumlah) 
+                ]);
+            }
+
             Income::where(['user_id' => auth()->user()->id, 'id' => $req->id])->update([
                 'tgl_income' => $req->tgl_income,
                 'jenis_pendapatan' => $req->jenis_pendapatan,
@@ -150,7 +172,7 @@ class IncomeController extends Controller
                 ->update([
                     'saldo' => DB::raw('saldo - '.$req->nominal)
                 ]);
-                
+
         Income::where('id', $req->id)->delete();
 
         return response()->json(['message' => 'Berhasil menghapus income!']);
