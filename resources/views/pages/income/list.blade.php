@@ -217,7 +217,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" id="labelCatatan">Catatan</label>
-                    <textarea class="form-control form-control-solid" id="catatanForm">${res.catatan}
+                    <textarea class="form-control form-control-solid" id="catatanForm">${res.catatan ? res.catatan : ''}
                         </textarea>
                 </div>
                 <button class="btn btn-primary mt-3" onClick="update(${res.id})">Update</button>

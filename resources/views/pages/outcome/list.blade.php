@@ -122,7 +122,7 @@
                     render: function(data, type, row){
                         return `
                             <button class="btn btn-success btn-sm btn-icon" data-id="${row.id}" data-jenispengeluaran="${row.jenis_pengeluaran}" data-tanggal="${row.tgl}" data-nominal="${row.nominal}" data-catatan="${row.catatan}" onClick="updateOutcomeModal(${row.id})"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-danger btn-sm btn-icon" onClick="remove(${row.id})"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-danger btn-sm btn-icon" onClick="remove(${row.id}, ${row.nominal})"><i class="bi bi-trash"></i></button>
                         `;
                     }
                 }
@@ -132,8 +132,34 @@
     
     tableOutcome();
 
+    $(document).on("change", "#walletForm", function(){
+        let saldo = $("#walletForm").val();
+        console.log(saldo);
+        $.ajax({
+            type: "GET",
+            url: "/u/currentSaldo",
+            data: {
+                id: saldo
+            },
+            success: function(res){
+                let saldoAtm = new Intl.NumberFormat("id-ID", { style: 'currency', currency: 'IDR' }).format(res.saldo);
+                $("#saldoAtm").text("Saldo Terkini: " + saldoAtm);
+            }
+        });
+    });
+
     function formTambah() {
         $("#contentModal").append(`
+        <div class="mb-3">
+            <label class="form-label">Pilih Wallet</label>
+            <select class="form-select form-select-solid" id="walletForm">
+                <option value="">Pilih</option>
+                @foreach($wallets as $wallet)
+                <option value="{{ $wallet->id }}">{{ $wallet->bank }} ({{ $wallet->rekening}})</option>
+                @endforeach
+            </select>
+            <div id="saldoAtm"></div>
+        </div>
         <div class="mb-3">
             <label class="form-label">Jenis Pengeluaran</label>
             <select class="form-select form-select-solid" id="jenisPengeluaranForm">
@@ -175,6 +201,7 @@
                 $("#contentModal").append(`
                 <div class="mb-3">
                     <label class="form-label">Jenis Pengeluaran</label>
+                    <input type="hidden" id="walletForm" value="${res.wallet_id}">
                     <select class="form-select form-select-solid" id="jenisPengeluaranForm" data-hide-search="true" data-control="select2">
                         <option value="${res.jenis_pengeluaran}">${res.jenis_pengeluaran}</option>
                         <option value="keperluan sehari-hari">Keperluan Sehari-hari</option>
@@ -194,7 +221,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" id="labelCatatan">Catatan</label>
-                    <textarea class="form-control form-control-solid" id="catatanForm">${res.catatan}
+                    <textarea class="form-control form-control-solid" id="catatanForm">${res.catatan ? res.catatan : ''}
                         </textarea>
                 </div>
                 <button class="btn btn-primary mt-3" onClick="update(${res.id})">Update</button>
@@ -207,6 +234,7 @@
     }
 
     function store(){
+        let walletId = $("#walletForm").val();
         let jenisPengeluaran = $("#jenisPengeluaranForm").val();
         let nominal = $("#nominalForm").val();
         let catatan = $("#catatanForm").val();
@@ -215,13 +243,14 @@
             type: "POST", 
             url: "/u/outcome/store",
             data: {
+                wallet_id: walletId,
                 jenis_pengeluaran: jenisPengeluaran,
                 nominal: nominal,
                 catatan: catatan
             },
             success: function(res){
                 $("#modal").modal("hide");
-                notifySwal("berhasil","success", res.message);
+                notifySwal(res.title, res.icon, res.message);
                 tableOutcome();
                 saldo();
             }, 
@@ -238,6 +267,7 @@
     }
 
     function update(id){
+        let walletForm = $("#walletForm").val();
         let jenisPengeluaranForm = $("#jenisPengeluaranForm").val();
         let tglOutcomeForm = $("#tglOutcomeForm").val();
         let nominalForm = $("#nominalForm").val();
@@ -247,6 +277,7 @@
             type: "PUT",
             url: "/u/outcome/update",
             data: {
+                wallet_id: walletForm,
                 id: id,
                 jenis_pengeluaran: jenisPengeluaranForm,
                 tgl: tglOutcomeForm,
@@ -271,11 +302,11 @@
         });
     }
 
-    function remove(id){
+    function remove(id, nominal){
         Swal.fire({
             title: "Konfirmasi",
             icon: "question",
-            text: "Yakin ingin menghapus income?",
+            text: "Yakin ingin menghapus income? Otomatis saldo akan dikembalikan.",
             
             showCancelButton: true,
             confirmButtonText: "Yakin"
@@ -285,11 +316,13 @@
                     type: "DELETE",
                     url: "/u/outcome/remove",
                     data: {
-                        id
+                        id,
+                        nominal
                     },
                     success: function(res){
                         notifySwal("Berhasil", "success", ""+res.message);
-                        tableIncome();
+                        tableOutcome();
+                        saldo();
                     }
                 });
             }
