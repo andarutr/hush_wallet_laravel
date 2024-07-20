@@ -11,6 +11,7 @@ Route::get('/u/dashboard', function () {
     return view('pages.dashboard', $data);
 });
 
+Route::get('/u/currentSaldo', [WalletController::class, 'currentSaldo']);
 Route::get('/u/wallet', [WalletController::class, 'index']);
 Route::get('/u/wallet/getData', [WalletController::class, 'getData']);
 Route::post('/u/wallet/store', [WalletController::class, 'store']);

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Income;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class IncomeController extends Controller
@@ -34,7 +36,7 @@ class IncomeController extends Controller
     public function getData(Request $req)
     {
         $income = Income::where('user_id', auth()->user()->id)
-                        ->limit(5)->get();
+                        ->limit(10)->get();
 
         return response()->json([
             'data' => $income
@@ -62,6 +64,8 @@ class IncomeController extends Controller
     public function index()
     {
         $data['title'] = 'List Income';
+        $data['wallets'] = Wallet::where('user_id', auth()->user()->id)->get();
+
         return view('pages.income.list', $data);
     }
 
@@ -74,9 +78,11 @@ class IncomeController extends Controller
     public function store(Request $req)
     {
         $validator = Validator::make($req->all(), [
+            'wallet_id' => 'required',
             'jenis_pendapatan' => 'required',
             'nominal' => 'required',
         ], [
+            'wallet_id.required' => 'Pilih wallet dulu!',
             'jenis_pendapatan.required' => 'Jenis pendapatan harus diisi!',
             'nominal.required' => 'Nominal income harus diisi!',
         ]);
@@ -87,6 +93,7 @@ class IncomeController extends Controller
             ], 422);
         }else{
             Income::create([
+                'wallet_id' => $req->wallet_id,
                 'user_id' => auth()->user()->id,
                 'tgl_income' => date('Y-m-d'),
                 // Andaru Triadi Income
@@ -95,6 +102,11 @@ class IncomeController extends Controller
                 'nominal' => $req->nominal,
                 'catatan' => $req->catatan,
             ]);
+
+            Wallet::where('id', $req->wallet_id)
+                    ->update([
+                        'saldo' => DB::raw('saldo + '.$req->nominal)
+                    ]);
 
             return response()->json([
                 'message' => 'Berhasil menambahkan data income!'
@@ -133,7 +145,14 @@ class IncomeController extends Controller
 
     public function remove(Request $req)
     {
+        $wallet_id = Income::where('id', $req->id)->first();
+        Wallet::where('id', $wallet_id->wallet_id)
+                ->update([
+                    'saldo' => DB::raw('saldo - '.$req->nominal)
+                ]);
+                
         Income::where('id', $req->id)->delete();
+
         return response()->json(['message' => 'Berhasil menghapus income!']);
     }
 }

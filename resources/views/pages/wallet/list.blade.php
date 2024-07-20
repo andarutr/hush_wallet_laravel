@@ -61,6 +61,7 @@ function containerMasterBank(){
             $("#containerMasterBank").empty();
 
             $.each(res, function(index, wallet){
+                let saldo = new Intl.NumberFormat("id-ID", { style: 'currency', currency: 'IDR' }).format(wallet.saldo);
                 if (index % 2 === 0) {
                     $("#containerMasterBank").append('<div class="row mb-4"></div>');
                 }
@@ -74,7 +75,7 @@ function containerMasterBank(){
                                     <img src="{{ asset('assets/media/banks') }}/${wallet.picture}" alt="" class="img-fluid me-4 rounded" width="50" />
                                     <div>
                                         <div class="fs-4 fw-bolder">${wallet.rekening}</div>
-                                        <div class="fs-6 fw-bold text-gray-400">Saldo: Rp. ${wallet.saldo}</div>
+                                        <div class="fs-6 fw-bold text-gray-400">Saldo: Rp. ${saldo}</div>
                                     </div>
                                 </div>
                             </div>

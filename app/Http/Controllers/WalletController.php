@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Validator;
 
 class WalletController extends Controller
 {
+    public function currentSaldo(Request $req)
+    {
+        $currentSaldo = Wallet::where([
+            'id' => $req->id,
+            'user_id' => auth()->user()->id
+        ])->first();
+
+        return response()->json($currentSaldo);
+    }
+
     public function getData()
     {
         $wallet = Wallet::where('user_id', auth()->user()->id)

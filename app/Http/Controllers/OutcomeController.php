@@ -32,7 +32,9 @@ class OutcomeController extends Controller
 
     public function getData(Request $req)
     {
-        $outcome = Outcome::where('user_id', auth()->user()->id)->get();
+        $outcome = Outcome::where('user_id', auth()->user()->id)
+                            ->limit(10)->get();
+                            
         return response()->json([
             'data' => $outcome
         ]);
