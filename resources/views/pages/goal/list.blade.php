@@ -25,12 +25,23 @@
             </div>
 
             <div class="card-body">
-                <div id="containerGoals"></div>
+                <div id="containerGoals" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div class="text-center mt-3">
+                        <i class="bi bi-trash text-danger" style="font-size: 24px;"></i>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer pt-4">
                 <div class="row">
-                    <p>Note: klik icon <i class="bi bi-record-circle"></i> apabila goals telah tercapai.</p>
+                    <div class="col-lg-12">
+                        <p>Note:</p> 
+                        <ul>
+                            <li>klik icon <i class="bi bi-record-circle"></i> apabila goals telah tercapai.</li>
+                            <li>Drag ke icon <i class="bi bi-trash"></i> untuk menghapus data.</li>
+                        </ul>
+                    </div>
+                    
                     <div class="col-lg-4">
                         <input class="form-control mb-3" placeholder="Masukkan Judul" id="judulForm">
                     </div>
@@ -39,7 +50,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-stack">
-                    <button class="btn btn-primary form-control" type="button" onClick="store()">Tambahkan</button>
+                    <button class="btn btn-primary form-control btn-sm" type="button" onClick="store()">Tambahkan</button>
                 </div>
             </div>
         </div>
@@ -49,6 +60,26 @@
 
 @push('scripts')
 <script>
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event, id) {
+        event.dataTransfer.setData("id", id);
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var id = event.dataTransfer.getData("id");
+
+        var target = event.target;
+        var rect = target.getBoundingClientRect();
+
+        if (event.clientY > rect.top && event.clientY < rect.bottom) {
+            deleteGoal(id);
+        }
+    }
+
     function notifySwal(title, icon, message){
         Swal.fire({
             title: title,
@@ -73,7 +104,7 @@
                     goal.is_checked == 0 ? icon = `<i style="font-size: 20px;" class="bi bi-record-circle text-danger" onClick="checkList(${goal.id})"></i>` : icon = `<i style="font-size: 20px;" class="bi bi-check2-square text-success" onClick="unCheckList(${goal.id})"></i>`; 
 
                     $("#containerGoals").append(`
-                        <div class="d-flex flex-stack py-4">
+                        <div class="d-flex flex-stack py-4" draggable="true" ondragstart="drag(event, ${goal.id})" data-id="${goal.id}">
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-45px symbol-circle">
                                     ${icon}
@@ -81,10 +112,11 @@
                                 <div class="ms-5">
                                     <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">${goal.judul}</a>
                                     <div class="fw-bold text-muted">${goal.catatan}</div>
+                                    <div class="fw-bold text-muted">${moment(goal.created_at).format('DD MMMM YYYY')}</div>
                                 </div>
                             </div>
                             <div class="d-flex flex-column align-items-end ms-2">
-                                <span class="text-muted fs-7 mb-1">${moment(goal.created_at).format('DD MMMM YYYY')}</span>
+                                <i class="bi bi-trash text-danger" style="font-size="25px"></i>
                             </div>
                         </div>
                     `);
@@ -146,6 +178,23 @@
                 containerGoals();
             }
         })
+    }
+
+    function deleteGoal(id) {
+        $.ajax({
+            type: "DELETE",
+            url: `/u/goals/remove`,
+            data: {
+                id: id
+            },
+            success: function(res) {
+                containerGoals(); 
+                notifySwal("Berhasil", "success", "Berhasil menghapus goal.");
+            },
+            error: function(xhr) {
+                notifySwal("Gagal", "error", "Gagal menghapus goal.");
+            }
+        });
     }
 </script>
 @endpush

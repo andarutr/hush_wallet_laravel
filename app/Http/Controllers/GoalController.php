@@ -63,4 +63,13 @@ class GoalController extends Controller
                     'is_checked' => 0
                 ]);
     }
+
+    public function remove(Request $req)
+    {
+        Goal::where('id', $req->id)->delete();
+
+        return response()->json([
+            'message' => 'Berhasil menghapus goal!'
+        ]);
+    }
 }

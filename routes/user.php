@@ -46,6 +46,7 @@ Route::prefix('/u/goals')->group(function(){
     Route::post('/store', [GoalController::class, 'store']);
     Route::put('/checklist', [GoalController::class, 'checklist']);
     Route::put('/unchecklist', [GoalController::class, 'unchecklist']);
+    Route::delete('/remove', [GoalController::class, 'remove']);
 });
 
 Route::prefix('/u/income')->group(function(){
