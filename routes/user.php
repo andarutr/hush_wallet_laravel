@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\NabungController;
 use App\Http\Controllers\OutcomeController;
@@ -41,9 +42,12 @@ Route::prefix('/u/nabung')->group(function(){
     Route::delete('/transaksi/removeChoose', [NabungController::class, 'removeChoose']);
 });
 
-Route::get('/u/goals', function () {
-    $data['title'] = 'Goals';
-    return view('pages.goal.list', $data);
+Route::prefix('/u/goals')->group(function(){
+    Route::get('/', [GoalController::class, 'index']);
+    Route::get('/getData', [GoalController::class, 'getData']);
+    Route::post('/store', [GoalController::class, 'store']);
+    Route::put('/checklist', [GoalController::class, 'checklist']);
+    Route::put('/unchecklist', [GoalController::class, 'unchecklist']);
 });
 
 Route::prefix('/u/income')->group(function(){

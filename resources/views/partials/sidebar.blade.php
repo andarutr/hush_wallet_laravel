@@ -74,7 +74,7 @@
                 <div class="menu-item py-3">
                     <a class="menu-link" href="/u/goals" title="Goals" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                         <span class="menu-icon">
-                            <i class="bi bi-person-lines-fill" style="font-size: 24px;"></i>
+                            <i class="bi bi-list-check" style="font-size: 24px;"></i>
                         </span>
                     </a>
                 </div>
