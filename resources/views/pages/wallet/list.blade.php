@@ -80,8 +80,9 @@ function containerMasterBank(){
                                 </div>
                             </div>
                             <div class="d-flex align-items-center py-2">
-                                <button class="btn btn-icon btn-sm btn-success me-3 btnEditModal" data-id="${wallet.id}" data-bank="${wallet.bank}" data-rekening="${wallet.rekening}" data-saldo="${wallet.saldo}"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-icon btn-sm btn-danger me-3 btnRemove" data-id="${wallet.id}"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-icon btn-sm btn-primary me-3 goToTransaction" data-id="${wallet.id}" title="Semua Transaksi"><i class="bi bi-wallet"></i></button>
+                                <button class="btn btn-icon btn-sm btn-success me-3 btnEditModal" data-id="${wallet.id}" data-bank="${wallet.bank}" data-rekening="${wallet.rekening}" data-saldo="${wallet.saldo}" title="Edit"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-icon btn-sm btn-danger me-3 btnRemove" data-id="${wallet.id}" title="Hapus"><i class="bi bi-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -92,6 +93,16 @@ function containerMasterBank(){
 }
 
 containerMasterBank();
+
+$(document).on("click", ".goToTransaction", function(){
+    let id = $(this).data("id");
+    localStorage.setItem("transactionId", id);
+
+    // Gunakan timeout agar localStorage di proses dahulu.
+    setTimeout(() => {
+        window.location.href = "/u/wallet/transaksi";
+    }, 1000);
+});
 
 $(document).on("click", ".btnAddModal", function(){
     $("#judulModal").text("Tambah Data Dompet");

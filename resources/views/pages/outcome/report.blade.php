@@ -3,7 +3,6 @@
 @section('content')
 <div class="row">
     <div class="col-xl-12">
-        <button type="button" class="btn btn-danger btn-sm mb-3" onClick="notifySwal('Info','info','fitur belum dibuat!')"><i class="bi bi-download"></i> PDF</button>
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -88,7 +87,14 @@
                 { data: 'id_transaksi'},
                 { data: 'jenis_pengeluaran'},
                 { data: 'tgl'},
-                { data: 'nominal'},
+                { 
+                    data: 'nominal',
+                    render: function(data, type, row){
+                        let saldo = new Intl.NumberFormat("id-ID", { style: 'currency', currency: 'IDR' }).format(data);
+
+                        return `${saldo}`;
+                    }
+                },
                 { data: 'catatan'},
                 { 
                     data: 'created_at',

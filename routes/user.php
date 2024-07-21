@@ -13,20 +13,18 @@ Route::get('/u/dashboard', function () {
 });
 
 Route::get('/u/currentSaldo', [WalletController::class, 'currentSaldo']);
-Route::get('/u/wallet', [WalletController::class, 'index']);
-Route::get('/u/wallet/getData', [WalletController::class, 'getData']);
-Route::post('/u/wallet/store', [WalletController::class, 'store']);
-Route::put('/u/wallet/update', [WalletController::class, 'update']);
-Route::delete('/u/wallet/remove', [WalletController::class, 'remove']);
 
-Route::get('/u/wallet/transaksi-in/{id_transaction}', function () {
-    $data['title'] = 'Wallet Transaksi IN';
-    return view('pages.wallet.transaction_in', $data);
-});
-
-Route::get('/u/wallet/transaksi-out/{id_transaction}', function () {
-    $data['title'] = 'Wallet Transaksi OUT';
-    return view('pages.wallet.transaction_out', $data);
+Route::prefix('/u/wallet')->group(function(){
+    Route::get('/', [WalletController::class, 'index']);
+    Route::get('/getData', [WalletController::class, 'getData']);
+    Route::post('/store', [WalletController::class, 'store']);
+    Route::put('/update', [WalletController::class, 'update']);
+    Route::delete('/remove', [WalletController::class, 'remove']);
+    Route::get('/transaksi', [WalletController::class, 'transaction']);
+    Route::get('/transaksi/getDataAtm', [WalletController::class, 'getDataAtm']);
+    Route::get('/transaksi/getDataIncome', [WalletController::class, 'getDataIncome']);
+    Route::get('/transaksi/getDataOutcome', [WalletController::class, 'getDataOutcome']);
+    Route::get('/transaksi/getDataNabung', [WalletController::class, 'getDataNabung']);
 });
 
 Route::prefix('/u/nabung')->group(function(){
