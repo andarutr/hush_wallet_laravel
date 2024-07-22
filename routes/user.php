@@ -4,6 +4,7 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\NabungController;
 use App\Http\Controllers\OutcomeController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
 
@@ -13,6 +14,10 @@ Route::get('/u/dashboard', function () {
 });
 
 Route::get('/u/currentSaldo', [WalletController::class, 'currentSaldo']);
+Route::get('/settings', [SettingController::class, 'index']);
+Route::get('/settings/getData', [SettingController::class, 'getData']);
+Route::put('/settings/update_profile', [SettingController::class, 'updateProfile']);
+Route::put('/settings/update_password', [SettingController::class, 'updatePassword']);
 
 Route::prefix('/u/wallet')->group(function(){
     Route::get('/', [WalletController::class, 'index']);
