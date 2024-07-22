@@ -30,6 +30,9 @@ Route::prefix('/u/wallet')->group(function(){
     Route::get('/transaksi/getDataIncome', [WalletController::class, 'getDataIncome']);
     Route::get('/transaksi/getDataOutcome', [WalletController::class, 'getDataOutcome']);
     Route::get('/transaksi/getDataNabung', [WalletController::class, 'getDataNabung']);
+    Route::post('/transaksi/downloadRekapanIncome', [WalletController::class, 'downloadRekapanIncome']);
+    Route::post('/transaksi/downloadRekapanOutcome', [WalletController::class, 'downloadRekapanOutcome']);
+    Route::post('/transaksi/downloadRekapanNabung', [WalletController::class, 'downloadRekapanNabung']);
 });
 
 Route::prefix('/u/nabung')->group(function(){

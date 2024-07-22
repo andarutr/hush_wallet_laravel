@@ -33,7 +33,7 @@
                                 <h2>Income</h2>
                             </div>
                             <div class="card-toolbar">
-                                <button type="button" class="btn btn-sm btn-flex btn-light-danger" onClick="notifySwal('Info','info','fitur belum dibuat!')">Download Pdf</button>
+                                <button type="button" class="btn btn-sm btn-flex btn-light-danger" onClick="downloadPdfIncomeModal()">Download Pdf</button>
                             </div>
                         </div>
                         <div class="card-body pt-0 pb-5">
@@ -45,7 +45,7 @@
                                         <th>Tanggal</th>
                                         <th>Nominal</th>
                                         <th>Catatan</th>
-                                        <th>Dibuat / Diperbarui</th>
+                                        <th>Dibuat</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -59,7 +59,7 @@
                                 <h2>Outcome</h2>
                             </div>
                             <div class="card-toolbar">
-                                <button type="button" class="btn btn-sm btn-flex btn-light-danger" onClick="notifySwal('Info','info','fitur belum dibuat!')">Download Pdf</button>
+                                <button type="button" class="btn btn-sm btn-flex btn-light-danger" onClick="downloadPdfOutcomeModal()">Download Pdf</button>
                             </div>
                         </div>
                         <div class="card-body pt-0 pb-5">
@@ -71,7 +71,7 @@
                                         <th>Tanggal</th>
                                         <th>Nominal</th>
                                         <th>Catatan</th>
-                                        <th>Dibuat / Diperbarui</th>
+                                        <th>Dibuat</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -85,7 +85,7 @@
                                 <h2>Nabung</h2>
                             </div>
                             <div class="card-toolbar">
-                                <button type="button" class="btn btn-sm btn-flex btn-light-primary" onClick="notifySwal('Info','info','fitur belum dibuat!')">Download Pdf</button>
+                                <button type="button" class="btn btn-sm btn-flex btn-light-primary" onClick="downloadPdfNabungModal()">Download Pdf</button>
                             </div>
                         </div>
                         <div class="card-body pt-0 pb-5">
@@ -97,7 +97,7 @@
                                         <th>Platform</th>
                                         <th>Nominal</th>
                                         <th>Catatan</th>
-                                        <th>Tgl Menabung</th>
+                                        <th>Tgl</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -105,6 +105,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal --}}
+<div class="modal fade" id="modal">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bolder" id="judulModal"></h2>
+            </div>
+            <div class="modal-body py-10 px-lg-17" id="contentModal"></div>
         </div>
     </div>
 </div>
@@ -149,6 +161,84 @@
 
     containerAtm();
 
+    function downloadPdfIncomeModal(){
+        $("#judulModal").text("Download Rekapan Income");
+        $("#contentModal").empty();
+        
+        $("#contentModal").append(`
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Dari</label>
+                    <input type="date" class="form-control" id="fromDateIncome">
+                </div>
+                <div class="col-lg-4">
+                    <label>Sampai</label>
+                    <input type="date" class="form-control" id="toDateIncome">
+                </div>
+                <div class="col-lg-4">
+                    <button class="btn btn-primary mt-5" onClick="downloadRekapanIncome()">Download</button>
+                </div>
+            </div>
+        `);
+        
+        $("#modal").modal("show");
+    }
+
+    function downloadPdfOutcomeModal(){
+        $("#judulModal").text("Download Rekapan Outcome");
+        $("#contentModal").empty();
+        
+        $("#contentModal").append(`
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Dari</label>
+                    <input type="date" class="form-control" id="fromDateOutcome">
+                </div>
+                <div class="col-lg-4">
+                    <label>Sampai</label>
+                    <input type="date" class="form-control" id="toDateOutcome">
+                </div>
+                <div class="col-lg-4">
+                    <button class="btn btn-primary mt-5" onClick="downloadRekapanOutcome()">Download</button>
+                </div>
+            </div>
+        `);
+        
+        $("#modal").modal("show");
+    }
+
+    function downloadPdfNabungModal(){
+        $("#judulModal").text("Download Rekapan Tabungan");
+        $("#contentModal").empty();
+        
+        $("#contentModal").append(`
+            <div class="row">
+                <div class="col-lg-3">
+                    <label>Dari</label>
+                    <input type="date" class="form-control" id="fromDateNabung">
+                </div>
+                <div class="col-lg-3">
+                    <label>Sampai</label>
+                    <input type="date" class="form-control" id="toDateNabung">
+                </div>
+                <div class="col-lg-3">
+                    <label>Platform</label>
+                    <select class="form-select form-select-solid" id="platformNabung">
+                        <option value="">Pilih</option>
+                        @foreach($platform as $pt)
+                        <option value="{{ $pt }}">{{ $pt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn btn-primary mt-5" onClick="downloadRekapanNabung()">Download</button>
+                </div>
+            </div>
+        `);
+        
+        $("#modal").modal("show");
+    }
+
     function tableIncome(){
         $("#tableIncome").DataTable({
             searching: false,
@@ -173,7 +263,7 @@
                 { 
                     data: null,
                     render: function(data, type, row){
-                        return `${moment(row.created_at).format('D-MM-YY')} / ${moment(row.updated_at).format('D-MM-YY')}`;
+                        return `${moment(row.created_at).format('D/MM/YY')}`;
                     }
                 },
             ]
@@ -206,7 +296,7 @@
                 { 
                     data: null,
                     render: function(data, type, row){
-                        return `${moment(row.created_at).format('D-MM-YY')} / ${moment(row.updated_at).format('D-MM-YY')}`;
+                        return `${moment(row.created_at).format('D/MM/YY')}`;
                     }
                 },
             ]
@@ -239,7 +329,7 @@
                 { 
                     data: null,
                     render: function(data, type, row){
-                        return `${moment(row.created_at).format('D-MM-YY')}`;
+                        return `${moment(row.created_at).format('D/MM/YY')}`;
                     }
                 },
             ]
@@ -247,5 +337,93 @@
     }
 
     tableNabung();
+
+    function downloadRekapanIncome(){
+        let from = $("#fromDateIncome").val();
+        let to = $("#toDateIncome").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/u/wallet/transaksi/downloadRekapanIncome",
+            data: {
+                from: from,
+                to: to,
+                bankId: localStorage.getItem('transactionId')
+            },
+            success: function(res){
+                notifySwal("Berhasil","success", res.message);
+                $("#modal").modal("hide");
+            },
+            error: function(xhr){
+                let errors = xhr.responseJSON.errors;
+                let message = '';
+
+                $.each(errors, function(key, value) {
+                    message += value[0] + '<br>';
+                });
+
+                notifySwal("error","error", message);
+            }
+        });
+    }
+
+    function downloadRekapanOutcome(){
+        let from = $("#fromDateOutcome").val();
+        let to = $("#toDateOutcome").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/u/wallet/transaksi/downloadRekapanOutcome",
+            data: {
+                from: from,
+                to: to,
+                bankId: localStorage.getItem('transactionId')
+            },
+            success: function(res){
+                notifySwal("Berhasil","success", res.message);
+                $("#modal").modal("hide");
+            },
+            error: function(xhr){
+                let errors = xhr.responseJSON.errors;
+                let message = '';
+
+                $.each(errors, function(key, value) {
+                    message += value[0] + '<br>';
+                });
+
+                notifySwal("error","error", message);
+            }
+        });
+    }
+    
+    function downloadRekapanNabung(){
+        let from = $("#fromDateNabung").val();
+        let to = $("#toDateNabung").val();
+        let platform = $("#platformNabung").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/u/wallet/transaksi/downloadRekapanNabung",
+            data: {
+                from,
+                to,
+                platform
+            },
+            success: function(res){
+                notifySwal("Berhasil","success", res.message);
+                $("#modal").modal("hide");
+            },
+            error: function(xhr){
+                let errors = xhr.responseJSON.errors;
+                let message = '';
+
+                $.each(errors, function(key, value) {
+                    message += value[0] + '<br>';
+                });
+
+                notifySwal("error","error", message);
+            }
+        });
+    }
 </script>
 @endpush

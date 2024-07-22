@@ -12,7 +12,7 @@
         <div class="tab-pane fade show active" role="tabpanel">
             <div class="row gx-9 gy-6">
                 <div class="col-xl-12">
-                    <button type="button" class="btn btn-primary btnAddModal" id="">Tambah Data</button>
+                    <button type="button" class="btn btn-primary btn-sm btnAddModal" id="">Tambah Data</button>
                 </div>
                 <div id="containerMasterBank"></div>
             </div>
@@ -126,7 +126,7 @@ $(document).on("click", ".btnAddModal", function(){
             <label class="form-label">Saldo Terakhir</label>
             <input type="number" class="form-control form-control-solid" id="saldoForm">
         </div>
-        <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnSubmit"><i class="bi bi-send"></i> Submit</button>
     </div>
     `);
 
