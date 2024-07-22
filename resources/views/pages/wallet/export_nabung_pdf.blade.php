@@ -46,8 +46,13 @@
     </style>
 </head>
 <body>
-    <h1>Rekapan Outcome</h1>
+    <h1>Rekapan Tabungan</h1>
+    <h5>Periode: {{ $dari }} - {{ $ke }}</h5>
+    @if($platform == 'allPlatform')
+    <p>Semua Platform</p>
+    @else
     <p>Platform: {{ $platform }}</p>
+    @endif
     <table>
         <thead> 
             <tr>
@@ -70,6 +75,10 @@
                 <td>{{ $nb->created_at }}</td>
             </tr>
             @endforeach
+            <tr>
+                <td colspan="3"><b>Total</b></td>
+                <td colspan="3"><b>Rp {{ number_format($total, 0, ',', '.') }}</b></td>
+            </tr>
         </tbody>
     </table>
 </body>

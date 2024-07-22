@@ -181,8 +181,13 @@ class WalletController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }else{
-            $data['income'] = Income::whereBetween('tgl_income', [$req->from, $req->to])->get();
+            $data['income'] = Income::whereBetween('tgl_income', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->get();
+            $data['total'] = Income::whereBetween('tgl_income', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->sum('nominal');
             $data['bank'] = MasterBank::where('id', $req->bankId)->first();
+            $data['dari'] = $req->from;
+            $data['ke'] = $req->to;
 
             $pdf = Pdf::loadView('pages.wallet.export_income_pdf', $data);
             return $pdf->download('Export Income '.$req->from.' - '.$req->to.'.pdf');
@@ -204,8 +209,13 @@ class WalletController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }else{
-            $data['outcome'] = Outcome::whereBetween('tgl', [$req->from, $req->to])->get();
+            $data['outcome'] = Outcome::whereBetween('tgl', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->get();
+            $data['total'] = Outcome::whereBetween('tgl', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->sum('nominal');
             $data['bank'] = MasterBank::where('id', $req->bankId)->first();
+            $data['dari'] = $req->from;
+            $data['ke'] = $req->to;
 
             $pdf = Pdf::loadView('pages.wallet.export_outcome_pdf', $data);
             return $pdf->download('Export Outcome '.$req->from.' - '.$req->to.'.pdf');
@@ -229,8 +239,23 @@ class WalletController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }else{
-            $data['nabung'] = Saving::whereBetween('created_at', [$req->from, $req->to])
-                                    ->where('platform', $req->platform)->get();
+            if($req->platform == 'allPlatform'){
+                $data['nabung'] = Saving::whereBetween('created_at', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->get();
+                $data['total'] = Saving::whereBetween('created_at', [$req->from, $req->to])
+                                        ->where('user_id', auth()->user()->id)->sum('nominal');
+            }else{
+                $data['nabung'] = Saving::whereBetween('created_at', [$req->from, $req->to])
+                                    ->where('platform', $req->platform)
+                                    ->where('user_id', auth()->user()->id)->get();
+                $data['total'] = Saving::whereBetween('created_at', [$req->from, $req->to])
+                                    ->where('platform', $req->platform)
+                                    ->where('user_id', auth()->user()->id)
+                                    ->sum('nominal');
+            }
+
+            $data['dari'] = $req->from;
+            $data['ke'] = $req->to;
             $data['platform'] = $req->platform;
             
             $pdf = Pdf::loadView('pages.wallet.export_nabung_pdf', $data);

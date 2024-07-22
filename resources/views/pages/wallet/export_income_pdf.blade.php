@@ -47,6 +47,7 @@
 </head>
 <body>
     <h1>Rekapan Income</h1>
+    <h5>Periode: {{ $dari }} - {{ $ke }}</h5>
     <p>Bank: {{ $bank->nama_bank }}</p>
     <table>
         <thead> 
@@ -70,6 +71,10 @@
                 <td>{{ $inc->created_at }}</td>
             </tr>
             @endforeach
+            <tr>
+                <td colspan="3"><b>Total</b></td>
+                <td colspan="3"><b>Rp {{ number_format($total, 0, ',', '.') }}</b></td>
+            </tr>
         </tbody>
     </table>
 </body>

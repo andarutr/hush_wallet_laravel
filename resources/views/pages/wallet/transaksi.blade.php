@@ -228,6 +228,7 @@
                         @foreach($platform as $pt)
                         <option value="{{ $pt }}">{{ $pt }}</option>
                         @endforeach
+                        <option value="allPlatform">Semua</option>
                     </select>
                 </div>
                 <div class="col-lg-3">
