@@ -29,8 +29,8 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-6 text-center">
-                        <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Pemasukan</h6>
-                        <h4 class="fs- mb-0" id="saldoBulanIni"></h4>
+                        <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Income</h6>
+                        <h6 class="fs- mb-0" id="saldoBulanIni"></h6>
                         <p>{{ \Carbon\Carbon::parse(now())->format('F Y') }}</p>
                     </div><!-- end col -->
                     <div class="col-6">
@@ -169,7 +169,10 @@
                 <option value="belum bekerja">Belum Bekerja</option>
             </select>
         </div>
-
+        <div class="mb-3">
+            <label class="form-label">Tanggal</label>
+            <input type="date" class="form-control form-control-solid" id="tglIncomeForm">
+        </div>
         <div class="mb-3">
             <label class="form-label">Nominal</label>
             <input type="number" class="form-control form-control-solid" id="nominalForm">
@@ -183,7 +186,7 @@
 
         <div class="d-flex align-items-start gap-3 mt-3">
             <button class="btn btn-sm btn-primary" onClick="store()"><i
-                    class="ri-bank label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                    class="bi bi-send"></i>Submit</button>
         </div>
         `);
     }
@@ -231,6 +234,7 @@
 
     function store(){
         let walletId = $("#walletForm").val();
+        let tanggal = $("#tglIncomeForm").val();
         let jenisPendapatan = $("#jenisPendapatanForm").val();
         let nominal = $("#nominalForm").val();
         let catatan = $("#catatanForm").val();
@@ -240,6 +244,7 @@
             url: "/u/income/store",
             data: {
                 wallet_id: walletId,
+                tgl_income: tanggal,
                 jenis_pendapatan: jenisPendapatan,
                 nominal: nominal,
                 catatan: catatan

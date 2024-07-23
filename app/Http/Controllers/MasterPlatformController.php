@@ -27,14 +27,14 @@ class MasterPlatformController extends Controller
     {
         $validator = Validator::make($req->all(), [
             'nama_platform' => 'required|string|unique:master_platform',
-            'picture' => 'required|image|mimes:png'
+            'picture' => 'required|image|mimes:png,jpg,jpeg'
         ],[
             'nama_platform.required' => 'Nama platform harus diisi!',
             'nama_platform.string' => 'Nama platform harus berisi teks!',
             'nama_platform.unique' => 'Nama platform sudah ada!',
             'picture.required' => 'Foto logo platform harus diunggah.',
             'picture.image' => 'File yang diunggah harus berupa gambar.',
-            'picture.mimes' => 'Format gambar yang diizinkan hanya: png',
+            'picture.mimes' => 'Format gambar yang diizinkan hanya: png, jpg, jpeg.',
         ]);
 
         if($validator->fails()){

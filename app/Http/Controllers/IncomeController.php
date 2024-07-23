@@ -81,10 +81,12 @@ class IncomeController extends Controller
             'wallet_id' => 'required',
             'jenis_pendapatan' => 'required',
             'nominal' => 'required',
+            'tgl_income' => 'required',
         ], [
             'wallet_id.required' => 'Pilih wallet dulu!',
             'jenis_pendapatan.required' => 'Jenis pendapatan harus diisi!',
             'nominal.required' => 'Nominal income harus diisi!',
+            'tgl_income.required' => 'Tanggal harus diisi!',
         ]);
 
         if($validator->fails()){
@@ -95,7 +97,7 @@ class IncomeController extends Controller
             Income::create([
                 'wallet_id' => $req->wallet_id,
                 'user_id' => auth()->user()->id,
-                'tgl_income' => date('Y-m-d'),
+                'tgl_income' => $req->tgl_income,
                 // Andaru Triadi Income
                 'id_transaksi' => 'ATI'.rand(0, 1000000),
                 'jenis_pendapatan' => $req->jenis_pendapatan,

@@ -80,10 +80,12 @@ class OutcomeController extends Controller
             'wallet_id' => 'required',
             'jenis_pengeluaran' => 'required',
             'nominal' => 'required',
+            'tgl' => 'required',
         ], [
             'wallet_id.required' => 'Pilih wallet dulu!',
             'jenis_pengeluaran.required' => 'Jenis pengeluaran harus diisi!',
             'nominal.required' => 'Nominal outcome harus diisi!',
+            'tgl.required' => 'Tanggal harus diisi!',
         ]);
 
         if($validator->fails()){
@@ -104,7 +106,7 @@ class OutcomeController extends Controller
                 Outcome::create([
                     'wallet_id' => $req->wallet_id,
                     'user_id' => auth()->user()->id,
-                    'tgl' => date('Y-m-d'),
+                    'tgl' => $req->tgl,
                     // Andaru Triadi Outcome
                     'id_transaksi' => 'ATO'.rand(0, 1000000),
                     'jenis_pengeluaran' => $req->jenis_pengeluaran,

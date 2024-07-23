@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\NabungController;
@@ -8,10 +9,7 @@ use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
 
-Route::get('/u/dashboard', function () {
-    $data['title'] = 'Dashboard';
-    return view('pages.dashboard', $data);
-});
+Route::get('/u/dashboard', [DashboardController::class, 'index']);
 
 Route::get('/u/currentSaldo', [WalletController::class, 'currentSaldo']);
 Route::get('/settings', [SettingController::class, 'index']);

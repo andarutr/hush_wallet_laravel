@@ -5,7 +5,7 @@
     <div class="card-header border-0 pt-6">
         <div class="card-toolbar">
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" onClick="showModal()">Tambah Data</button>
+                <button type="button" class="btn btn-sm btn-primary" onClick="showModal()">Tambah Data</button>
             </div>
         </div>
     </div>
@@ -112,7 +112,8 @@ function table(){
             },
             {
                 render: function(data, type, row){
-                    return `<button class="btn btn-sm btn-danger" id="btnRemove" onClick="remove(${row.id})"><i class="bi bi-trash"></i></button>`;
+                    return `
+                    <button class="btn btn-icon btn-sm btn-danger" id="btnRemove" onClick="remove(${row.id})"><i class="bi bi-trash"></i></button>`;
                 }
             },
         ]

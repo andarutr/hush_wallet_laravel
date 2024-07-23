@@ -116,7 +116,7 @@ function form(){
             <label class="form-label" id="labelCatatan">Catatan</label>
             <textarea class="form-control form-control-solid" id="catatanForm"></textarea>
         </div>
-        <button class="btn btn-primary mt-3" onClick="store()">Submit</button>
+        <button class="btn btn-sm btn-primary mt-3" onClick="store()"><i class="bi bi-send"></i> Submit</button>
     `);
 }
 

@@ -29,8 +29,8 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-6 text-center">
-                        <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Pengeluaran</h6>
-                        <h4 class="fs- mb-0" id="dataOut"></h4>
+                        <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Outcome</h6>
+                        <h6 class="fs- mb-0" id="dataOut"></h6>
                         <p>{{ \Carbon\Carbon::parse(now())->format('F Y') }}</p>
                     </div><!-- end col -->
                     <div class="col-6">
@@ -112,7 +112,7 @@
                     render: function(data, type, row){
                         let rupiah = new Intl.NumberFormat("id-ID", { style: 'currency', currency: 'IDR' }).format(data);
 
-                        return `Rp ${rupiah}`;
+                        return `${rupiah}`;
                     }
                 },
                 {
@@ -173,6 +173,11 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label">Tanggal</label>
+            <input type="date" class="form-control form-control-solid" id="tglOutcomeForm">
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Nominal</label>
             <input type="number" class="form-control form-control-solid" id="nominalForm">
         </div>
@@ -185,7 +190,7 @@
 
         <div class="d-flex align-items-start gap-3 mt-3">
             <button class="btn btn-sm btn-primary" onClick="store()"><i
-                    class="ri-bank label-icon align-middle fs-16 ms-2"></i>Submit</button>
+                    class="bi bi-send"></i> Submit</button>
         </div>
         `);
     }
@@ -236,6 +241,7 @@
     function store(){
         let walletId = $("#walletForm").val();
         let jenisPengeluaran = $("#jenisPengeluaranForm").val();
+        let tanggal = $("#tglOutcomeForm").val();
         let nominal = $("#nominalForm").val();
         let catatan = $("#catatanForm").val();
 
@@ -244,6 +250,7 @@
             url: "/u/outcome/store",
             data: {
                 wallet_id: walletId,
+                tgl: tanggal,
                 jenis_pengeluaran: jenisPengeluaran,
                 nominal: nominal,
                 catatan: catatan
