@@ -1,3 +1,5 @@
+<img src="public/assets/media/logos/hush.png" height="250px">
+
 ## Hush Wallet
 Hush Wallet adalah aplikasi manajemen keuangan pribadi yang dirancang untuk membantu Anda melacak semua aspek keuangan mulai dari income, outcome, dan tabungan. Hush Wallet membuat pengelolaan keuangan menjadi mudah dan menyenangkan.
 
