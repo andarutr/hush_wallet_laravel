@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="row mt-5 mb-5">
-                <div class="col-lg-10 mx-auto">
+                <div class="col-lg-8 mx-auto">
                     <div class="card card-bordered">
                         <div class="card-body">
                             <h5>Rekapan Income Tahunan</h5>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-10 mx-auto mt-3">
+                <div class="col-lg-8 mx-auto mt-3">
                     <div class="card card-bordered">
                         <div class="card-body">
                             <h5>Rekapan Outcome Tahunan</h5>
